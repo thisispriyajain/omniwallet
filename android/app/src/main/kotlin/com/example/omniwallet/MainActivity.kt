@@ -1,4 +1,4 @@
-package com.example.omniwallet
+package com.csen268.omniwallet
 
 import io.flutter.embedding.android.FlutterActivity
 
