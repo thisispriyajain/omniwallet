@@ -72,4 +72,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'csen268-omniwallet.firebasestorage.app',
     iosBundleId: 'com.csen268.omniwallet',
   );
+
 }
