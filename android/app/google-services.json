@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "707532126208",
+    "project_id": "csen268-omniwallet",
+    "storage_bucket": "csen268-omniwallet.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:707532126208:android:68a9ef311e4df1a75900e5",
+        "android_client_info": {
+          "package_name": "com.csen268.omniwallet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDV-G4Fy1PMJM3dyEHH-rMDNTtjm8crh6o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
