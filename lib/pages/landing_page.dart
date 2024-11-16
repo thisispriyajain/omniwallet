@@ -1,93 +1,190 @@
-class LandingPage extends StatefulWidget {
-  const LandingPage({super.key, required this.title});
+import 'package:flutter/material.dart';
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<LandingPage> createState() => _LandingPageState();
-}
-
-class _LandingPageState extends State<LandingPage> {
-  int _counter = 0;
-  DocumentReference? docRef;
-
-  void _incrementCounter() async {
-     docRef = await FirebaseFirestore.instance.collection("test").add({'name':'Lauren'});
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+class LandingPage extends StatelessWidget {
+  const LandingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the LandingPage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        backgroundColor: Colors.white,
+        title: const Text(
+          'OmniWallet',
+          style: TextStyle(
+            color: Color(0xFF0093FF),
+            fontSize: 45, // Increase text size
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+        elevation: 0,
+        toolbarHeight: 100, // Increase the height of the AppBar
+        titleSpacing: 0,
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-              Text(
-              '${docRef?.path}',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+      backgroundColor: Colors.white,
+      body: GestureDetector(
+        onTap: () {
+          // Handle tap event here if needed
+        },
+        child: Center(
+          child: Column(
+            children: [
+              Image.asset(
+                'assets/app_icon.png',
+                width: 150,
+                height: 150,
+              ),
+              SizedBox(height: 20),
+              const Text(
+                'Welcome',
+                style: TextStyle(
+                  fontSize: 45,
+                  fontWeight: FontWeight.normal,
+                  color: Color(0xFF0093FF),
+                ),
+              ),
+              SizedBox(height: 20),
+              Container(
+                // Blue rectangle
+                width: double.infinity,
+                height: 200,
+                color: Color(0xFF0093FF),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // First small white rectangle with user icon and "user ID"
+                    Container(
+                      width: 350,
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius:
+                            BorderRadius.circular(4), // 4-point radius
+                      ),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.account_circle, // User icon
+                              color: Color(0xFF0093FF),
+                              size: 30,
+                            ),
+                          ),
+                          const Text(
+                            'User ID',
+                            style: TextStyle(
+                              color: Color(0xFF0093FF),
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                        height:
+                            30), // Adds space between the two white rectangles
+                    Container(
+                      width: 350,
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 12.0),
+                            child: Icon(
+                              Icons.lock, // Lock icon
+                              color: Color(0xFF0093FF),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: const Text(
+                              'Password',
+                              style: TextStyle(
+                                color: Color(0xFF0093FF),
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                          const Spacer(), // Adds space between text and eye icon
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Icon(
+                              Icons.remove_red_eye,
+                              color: Color(0xFF0093FF),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                  height:
+                      30), // Space between the blue rectangle and the button
+              ElevatedButton(
+                onPressed: () {
+                  // Add the action for the button here
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF0093FF), // Button color
+                  minimumSize: Size(125, 50), // Button size
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12), // Rounded corners
+                  ),
+                ),
+                child: const Text(
+                  'Log In',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white, // Text color
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              // Row for "Forgot Password" and "Sign Up" texts
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        // Handle Forgot Password action
+                      },
+                      child: const Text(
+                        'Forgot Password',
+                        style: TextStyle(
+                          color: Color(0xFF0093FF),
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        // Handle Sign Up action
+                      },
+                      child: const Text(
+                        'Sign Up',
+                        style: TextStyle(
+                          color: Color(0xFF0093FF),
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

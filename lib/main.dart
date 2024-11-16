@@ -4,6 +4,7 @@ import 'package:omniwallet/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'my_home_page.dart';
 import 'pages/settings_page.dart';
+import 'pages/landing_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,10 +45,10 @@ class MyApp extends StatelessWidget {
       routes: {
         // '/': (context) => MyHomePage(),
         '/settings': (context) => SettingsPage(),
+        '/landing': (context) => LandingPage(),
       },
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      //home: const LandingPage(),
     );
   }
 }
-
-
