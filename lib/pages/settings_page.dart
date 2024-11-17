@@ -6,74 +6,79 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  bool isDarkMode = true;
-  bool isLockdownMode = true;
-  bool isFaceID = true;
-  bool isNotifications = true;
+  bool isDarkMode = false;
+  bool isLockdownMode = false;
+  bool isFaceID = false;
+  bool isNotificationsEnabled = false;
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: const Text(
-          'Settings',
-          style: TextStyle(
-            color: Colors.blue,
-            fontSize: 24, 
-            fontWeight: FontWeight.bold,
-          ),
+        title: Text(
+          "Settings",
+          style: TextStyle(color: Colors.blue),
         ),
         centerTitle: true,
+        backgroundColor: Colors.white,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.blue),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
+        elevation: 0,
       ),
-      body: Column(
-        children: [
-          buildSwitchListTile('Dark Mode', isDarkMode, (value) {
-            setState(() {
-              isDarkMode = value;
-            });
-          }),
-          buildSwitchListTile('Lockdown Mode', isLockdownMode, (value) {
-            setState(() {
-              isLockdownMode = value;
-            });
-          }),
-          buildSwitchListTile('FaceID', isFaceID, (value) {
-            setState(() {
-              isFaceID = value;
-            });
-          }),
-          buildSwitchListTile('Notifications', isNotifications, (value) {
-            setState(() {
-              isNotifications = value;
-            });
-          }),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            SwitchListTile(
+              title: Text("Dark Mode"),
+              value: isDarkMode,
+              onChanged: (value) {
+                setState(() {
+                  isDarkMode = value;
+                });
+              },
+              activeColor: Colors.blue,
+            ),
+            Divider(),
+            SwitchListTile(
+              title: Text("Lockdown Mode"),
+              value: isLockdownMode,
+              onChanged: (value) {
+                setState(() {
+                  isLockdownMode = value;
+                });
+              },
+              activeColor: Colors.blue,
+            ),
+            Divider(),
+            SwitchListTile(
+              title: Text("Face ID"),
+              value: isFaceID,
+              onChanged: (value) {
+                setState(() {
+                  isFaceID = value;
+                });
+              },
+              activeColor: Colors.blue,
+            ),
+            Divider(),
+            SwitchListTile(
+              title: Text("Notifications"),
+              value: isNotificationsEnabled,
+              onChanged: (value) {
+                setState(() {
+                  isNotificationsEnabled = value;
+                });
+              },
+              activeColor: Colors.blue,
+            ),
+          ],
+        ),
       ),
     );
   }
-
-Widget buildSwitchListTile(String title, bool value, ValueChanged<bool> onChanged) {
-  return Container(
-    decoration: BoxDecoration(
-      border: Border(
-        bottom: BorderSide(color: Colors.blue.withOpacity(0.2)),
-      ),
-    ),
-    child: SwitchListTile(
-      title: Text(title),
-      value: value,
-      onChanged: onChanged,
-      activeColor: Colors.blue,
-    ),
-  );
-}
 }
