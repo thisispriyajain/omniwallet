@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:omniwallet/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'my_home_page.dart';
-import 'pages/settings_page.dart';
 import 'pages/landing_page.dart';
 import 'pages/forgot_password.dart';
+import 'navigation_bar.dart';
+import 'pages/profile_page.dart';
+import 'pages/settings_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,13 +47,15 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         // '/': (context) => MyHomePage(),
-        '/settings': (context) => SettingsPage(),
         '/landing': (context) => LandingPage(),
         '/forgot_password': (context) => ForgotPassword(),
+        '/profile': (context) => ProfilePage(),
+        '/settings': (context) => SettingsPage(),
       },
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+     home: const MyHomePage(title: 'OmniWallet'),
       //home: const LandingPage(),
       //home: const ForgotPassword(),
+      //home: SettingsPage(),
     );
   }
 }
