@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
-class LandingPage extends StatelessWidget {
+class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
+
+  @override
+  State<LandingPage> createState() => _LandingPageState();
+}
+
+class _LandingPageState extends State<LandingPage> {
+  bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -53,74 +60,16 @@ class LandingPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // First small white rectangle with user icon and "user ID"
-                    Container(
-                      width: 350,
-                      height: 45,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius:
-                            BorderRadius.circular(4), // 4-point radius
-                      ),
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.account_circle, // User icon
-                              color: Color(0xFF0093FF),
-                              size: 30,
-                            ),
-                          ),
-                          const Text(
-                            'User ID',
-                            style: TextStyle(
-                              color: Color(0xFF0093FF),
-                              fontSize: 20,
-                            ),
-                          ),
-                        ],
-                      ),
+                    // First TextField with user icon and "User ID"
+                    _buildTextField(
+                      hintText: 'User ID',
+                      icon: Icons.account_circle,
                     ),
-                    SizedBox(
-                        height:
-                            30), // Adds space between the two white rectangles
-                    Container(
-                      width: 350,
-                      height: 45,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 12.0),
-                            child: Icon(
-                              Icons.lock, // Lock icon
-                              color: Color(0xFF0093FF),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: const Text(
-                              'Password',
-                              style: TextStyle(
-                                color: Color(0xFF0093FF),
-                                fontSize: 20,
-                              ),
-                            ),
-                          ),
-                          const Spacer(), // Adds space between text and eye icon
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Icon(
-                              Icons.remove_red_eye,
-                              color: Color(0xFF0093FF),
-                            ),
-                          ),
-                        ],
-                      ),
+                    SizedBox(height: 30), // Space between fields
+                    // Second TextField for password with visibility toggle
+                    _buildPasswordField(
+                      hintText: 'Password',
+                      icon: Icons.lock,
                     ),
                   ],
                 ),
@@ -182,6 +131,94 @@ class LandingPage extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required String hintText,
+    required IconData icon,
+  }) {
+    return SizedBox(
+      width: 350,
+      height: 45,
+      child: TextField(
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: const TextStyle(
+            color: Color(0xFF0093FF),
+            fontSize: 18,
+          ),
+          filled: true,
+          fillColor: Colors.white,
+          prefixIcon: Icon(
+            icon,
+            color: Color(0xFF0093FF),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: BorderSide(
+              color: Colors.transparent,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: BorderSide(
+              color: Color(0xFF0093FF),
+              width: 2,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPasswordField({
+    required String hintText,
+    required IconData icon,
+  }) {
+    return SizedBox(
+      width: 350,
+      height: 45,
+      child: TextField(
+        obscureText: !_isPasswordVisible,
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: const TextStyle(
+            color: Color(0xFF0093FF),
+            fontSize: 18,
+          ),
+          filled: true,
+          fillColor: Colors.white,
+          prefixIcon: Icon(
+            icon,
+            color: Color(0xFF0093FF),
+          ),
+          suffixIcon: IconButton(
+            icon: Icon(
+              _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+              color: Color(0xFF0093FF),
+            ),
+            onPressed: () {
+              setState(() {
+                _isPasswordVisible = !_isPasswordVisible;
+              });
+            },
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: BorderSide(
+              color: Colors.transparent,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: BorderSide(
+              color: Color(0xFF0093FF),
+              width: 2,
+            ),
           ),
         ),
       ),

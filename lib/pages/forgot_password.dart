@@ -38,7 +38,7 @@ class ForgotPassword extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
               children: [
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 const Text(
                   "We'll send your password reset info to the email address linked to your account.",
                   style: TextStyle(
@@ -48,44 +48,46 @@ class ForgotPassword extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
 
-                // Make the rectangle narrower and align text to the left
-                Container(
-                  width: 350, // Adjust the width to make it narrower
-                  height: 45,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Color(0xFF0093FF), // Blue border
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(6), // Rounded corners
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Align(
-                      alignment:
-                          Alignment.centerLeft, // Align the text to the left
-                      child: const Text(
-                        'Email address',
-                        style: TextStyle(
+                // TextField for entering email address
+                SizedBox(
+                  width: 350,
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Email address',
+                      hintStyle: const TextStyle(
+                        color: Color(0xFF0093FF),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF0093FF), // Blue border
+                          width: 2,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6),
+                        borderSide: const BorderSide(
                           color: Color(0xFF0093FF),
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                          width: 2,
                         ),
                       ),
                     ),
                   ),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: () {
                     // Add the action for the button here
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF0093FF), // Button color
-                    minimumSize: Size(200, 40), // Button size
+                    backgroundColor: const Color(0xFF0093FF), // Button color
+                    minimumSize: const Size(200, 40), // Button size
                     shape: RoundedRectangleBorder(
                       borderRadius:
                           BorderRadius.circular(10), // Rounded corners
