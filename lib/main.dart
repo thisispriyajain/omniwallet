@@ -8,6 +8,7 @@ import 'pages/forgot_password.dart';
 import 'navigation_bar.dart';
 import 'pages/profile_page.dart';
 import 'pages/settings_page.dart';
+import 'pages/signup_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,11 +52,9 @@ class MyApp extends StatelessWidget {
         '/forgot_password': (context) => ForgotPassword(),
         '/profile': (context) => ProfilePage(),
         '/settings': (context) => SettingsPage(),
+        '/signup': (context) => SignupPage(),
       },
-     home: const MyHomePage(title: 'OmniWallet'),
-      //home: const LandingPage(),
-      //home: const ForgotPassword(),
-      //home: SettingsPage(),
+      home: const MyHomePage(title: 'OmniWallet'),
     );
   }
 }
