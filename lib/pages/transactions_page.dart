@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../navigation_bar.dart';
+
 class TransactionsPage extends StatelessWidget {
+    const TransactionsPage({super.key});
+    
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,6 +94,7 @@ class TransactionsPage extends StatelessWidget {
           ),
         ),
       ),
+      bottomNavigationBar: CustomNavigationBar(),
     );
   }
 
