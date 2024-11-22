@@ -80,7 +80,6 @@ class ProfilePage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: CustomNavigationBar(),
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import '../navigation_bar.dart';
+import '../../navigation_bar.dart';
 
 class TrackingPage extends StatelessWidget {
   const TrackingPage({super.key});
@@ -88,7 +88,6 @@ class TrackingPage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: CustomNavigationBar(),
     );
   }
 }

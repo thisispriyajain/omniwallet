@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../navigation_bar.dart';
+import '../../navigation_bar.dart';
 
 class TransactionsPage extends StatelessWidget {
     const TransactionsPage({super.key});
@@ -94,7 +94,6 @@ class TransactionsPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: CustomNavigationBar(),
     );
   }
 

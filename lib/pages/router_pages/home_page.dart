@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import '../navigation_bar.dart';
+import '../../navigation_bar.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -19,7 +19,6 @@ class HomePage extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      bottomNavigationBar: CustomNavigationBar(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
