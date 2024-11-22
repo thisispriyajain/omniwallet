@@ -111,15 +111,16 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:omniwallet/pages/login/landing_page.dart';
 import 'package:omniwallet/pages/settings_page.dart';
 
-import 'pages/forgot_password.dart';
-import 'pages/home_page.dart';
-import 'pages/landing_page.dart';
-import 'pages/profile_page.dart';
-import 'pages/signup_page.dart';
-import 'pages/tracking_page.dart';
-import 'pages/transactions_page.dart';
+import 'pages/login/forgot_password.dart';
+import 'pages/router_pages/home_page.dart';
+import 'pages/login/landing_page.dart';
+import 'pages/router_pages/profile_page.dart';
+import 'pages/login/signup_page.dart';
+import 'pages/router_pages/tracking_page.dart';
+import 'pages/router_pages/transactions_page.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
