@@ -106,19 +106,17 @@
 //   }
 // }
 
-
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:omniwallet/blocs/authentication/bloc/authentication_bloc.dart';
 import 'package:omniwallet/pages/login/landing_page.dart';
 import 'package:omniwallet/pages/settings_page.dart';
 
-import 'pages/login/forgot_password.dart';
+import 'pages/login/views/forgot_password.dart';
 import 'pages/router_pages/home_page.dart';
 import 'pages/login/landing_page.dart';
 import 'pages/router_pages/profile_page.dart';
-import 'pages/login/signup_page.dart';
+import 'pages/login/views/signup_view.dart';
 import 'pages/router_pages/tracking_page.dart';
 import 'pages/router_pages/transactions_page.dart';
 
@@ -136,7 +134,6 @@ class MyHomePage extends StatefulWidget {
 
   final String title;
 
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -146,9 +143,15 @@ class _MyHomePageState extends State<MyHomePage> {
   DocumentReference? docRef;
 
   final List<Widget> UIPages = [
-    const LandingPage(),
-    const ForgotPassword(),
-    const SignupPage(),
+    LandingPage(
+        /*
+      emailSignInCallback: ({required String email, required String password}) {
+        // Example logic for handling email sign-in
+        print('Signed in with Email: $email, Password: $password');
+      },*/
+        ),
+    //const ForgotPassword(),
+    //const SignupView(),
     const HomePage(),
     const TransactionsPage(),
     const TrackingPage(),
@@ -157,7 +160,9 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
 
   void _incrementCounter() async {
-    docRef = await FirebaseFirestore.instance.collection("test").add({'name':'Lauren'});
+    docRef = await FirebaseFirestore.instance
+        .collection("test")
+        .add({'name': 'Lauren'});
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
