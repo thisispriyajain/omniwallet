@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:omniwallet/blocs/authentication/bloc/authentication_bloc.dart';
 import 'package:omniwallet/pages/router_pages/home_page.dart';
 import 'package:omniwallet/pages/router_pages/profile_page.dart';
@@ -27,21 +29,30 @@ GoRouter routerDemo(AuthenticationBloc authenticationBloc) {
   return GoRouter(
     navigatorKey: rootNavigatorKey,
     initialLocation: '/home',
-    refreshListenable: StreamToListenable([authenticationBloc.stream]),
-    redirect: (context, state) async {
-      final prefs = await SharedPreferences.getInstance();
-      final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-      if (isLoggedIn && (state.fullPath?.startsWith("/login") ?? false)) {
-        return "/home"; //if user is already logged in and trying to access /login, redirect to home
-      }
-      // if (!isLoggedIn && (state.fullPath?.startsWith("/login") ?? false)) {
-      //   return null;
-      // }
-      if (!isLoggedIn && !(state.fullPath?.startsWith("/login") ?? false)) {
-        return "/login"; //if user is not logged in and tries to access other page, redirect to login
+    refreshListenable:
+        StreamToListenable([FirebaseAuth.instance.authStateChanges()]),
+    redirect: (context, state) {
+      if (FirebaseAuth.instance.currentUser == null &&
+          !(state.fullPath?.startsWith("/login") ?? false)) {
+        return "/login";
       }
       return null;
     },
+    // refreshListenable: StreamToListenable([authenticationBloc.stream]),
+    // redirect: (context, state) async {
+    //   final prefs = await SharedPreferences.getInstance();
+    //   final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    //   if (isLoggedIn && (state.fullPath?.startsWith("/login") ?? false)) {
+    //     return "/home"; //if user is already logged in and trying to access /login, redirect to home
+    //   }
+    //   // if (!isLoggedIn && (state.fullPath?.startsWith("/login") ?? false)) {
+    //   //   return null;
+    //   // }
+    //   if (!isLoggedIn && !(state.fullPath?.startsWith("/login") ?? false)) {
+    //     return "/login"; //if user is not logged in and tries to access other page, redirect to login
+    //   }
+    //   return null;
+    // },
     routes: [
       GoRoute(
           path: '/login',
