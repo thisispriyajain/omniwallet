@@ -127,7 +127,12 @@ class LogInCubit extends Cubit<LogInState> {
         // name: name,
         //confirmPassword: confirmPassword
       );
-      emit(SignInSuccess());
+      User? user = credential.user;
+      if (user != null && !user.emailVerified) {
+        await user.sendEmailVerification();
+      }
+      //emit(SignInSuccess());
+      emit(SignInInitial());
 
       return null;
     } on FirebaseAuthException catch (e) {

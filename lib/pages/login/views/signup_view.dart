@@ -140,7 +140,7 @@ class _SignupViewState extends State<SignupView> {
                 SizedBox(height: 30),
                 Container(
                   width: double.maxFinite,
-                  padding: EdgeInsets.only(top: 10),
+                  padding: EdgeInsets.only(top: 10, bottom: 10),
                   child: FilledButton(
                       onPressed: () async {
                         if (_formKey.currentState?.validate() ?? false) {
@@ -156,6 +156,16 @@ class _SignupViewState extends State<SignupView> {
                               passwordController.clear();
                               crossFadeState = CrossFadeState.showSecond;
                             });
+                          } else {
+                            await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text("Thank you for signing up!"),
+                                    content: Text(
+                                        "Please check your email for verifying your email address."),
+                                  );
+                                });
                           }
                         }
                       },

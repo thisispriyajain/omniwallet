@@ -45,19 +45,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         elevation: 0,
         toolbarHeight: 100,
         titleSpacing: 0,
-        // leading: IconButton(
-        //   icon: const Icon(
-        //     Icons.arrow_back,
-        //     color: Color(0xFF0093FF),
-        //   ),
-        //   iconSize: 40,
-        //   onPressed: () {
-        //     Navigator.pop(context);
-        //   },
-        // ),
       ),
       backgroundColor: Colors.white,
-      body: GestureDetector(
+      body: Form(
+        key: _formKey,
         child: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -74,6 +65,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 50),
+                const SizedBox(height: 30),
+                AnimatedCrossFade(
+                    firstChild: Container(),
+                    secondChild: Text(errorMessage ?? "Error",
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.error)),
+                    crossFadeState: crossFadeState,
+                    duration: Duration(milliseconds: 300)),
                 TextFormField(
                   controller: emailController,
                   decoration: InputDecoration(labelText: "Email address"),
@@ -82,7 +81,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   },
                   validator: (value) => null,
                 ),
-                const SizedBox(height: 30),
                 Container(
                   width: double.maxFinite,
                   padding: EdgeInsets.only(top: 10, bottom: 10),
@@ -109,7 +107,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                     ),
                                     actions: [
                                       FilledButton(
-                                        child: Text("OK"),
+                                        child: Text(
+                                          "OK",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        style: FilledButton.styleFrom(
+                                            backgroundColor: Color(0xFF0093FF)),
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         },
@@ -129,9 +132,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Found your password?"),
+                    Text("Got your password?"),
                     TextButton(
-                      child: Text("Cancel",
+                      child: Text("Log in",
                           style: TextStyle(
                             color: Color(0xFF0093FF),
                           )),
@@ -145,5 +148,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
   }
 }
