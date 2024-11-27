@@ -63,7 +63,6 @@ class LogInCubit extends Cubit<LogInState> {
         UserCredential userCredential =
             await FirebaseAuth.instance.signInWithCredential(credential);
         emit(SignInSuccess());
-        //authenticationBloc.add(AuthenticationLoginEvent());
         return null;
       } catch (e) {
         return e.toString();

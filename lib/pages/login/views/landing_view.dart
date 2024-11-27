@@ -224,10 +224,7 @@ class _LandingPageState extends State<LandingView> {
                         },
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(100),
-                          // side:
-                          //     BorderSide(color: Colors.grey.shade300, width: 1),
                         ),
-                        //elevation: 2,
                       ),
                     ),
                     Container(
