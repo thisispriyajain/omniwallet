@@ -59,10 +59,10 @@ import '../../model/transaction.dart';
 
 
 
-class TransactionDetailPage extends StatelessWidget {
+class TransactionDetails extends StatelessWidget {
   final Transaction transaction;
 
-  const TransactionDetailPage({super.key, required this.transaction});
+  const TransactionDetails({super.key, required this.transaction});
 
   @override
   Widget build(BuildContext context) {

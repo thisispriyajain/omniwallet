@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../model/transaction.dart';
 import '../../widgets/transaction_card.dart';
-import 'new_transaction_page.dart';
-import 'transaction_detail.dart';
+import 'new_transaction.dart';
+import 'transaction_details.dart';
 
 
 
@@ -261,7 +261,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => NewTransactionPage(
+                              builder: (context) => NewTransaction(
                                 onAddTransaction: (newTransaction) {
                                   setState(() {
                                     _transactions.add(newTransaction);
@@ -477,7 +477,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      TransactionDetailPage(transaction: transaction),
+                                      TransactionDetails(transaction: transaction),
                                 ),
                               );
                             },
