@@ -64,7 +64,7 @@ class _LandingPageState extends State<LandingView> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
-                'assets/app_icon.png',
+                'assets/icons/icon.png',
                 width: 150,
                 height: 150,
               ),
