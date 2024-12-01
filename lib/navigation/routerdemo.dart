@@ -61,28 +61,32 @@ GoRouter routerDemo() {
             path: '/transactions',
             name: RouteName.transaction,
             builder: (BuildContext context, GoRouterState state) {
+              // return TransactionsPage(transactions: Transaction.mockTransactions());
               return const TransactionsPage();
             },
-            routes: [
-              GoRoute(
-                path: 'detail',
-                name: RouteName.transactionDetails,
-                parentNavigatorKey: rootNavigatorKey,
-                builder: (BuildContext context, GoRouterState state) {
-                  final transaction = state.extra as Transaction;
-                  return TransactionDetails(transaction: transaction);
-                },
-              ),
-              // GoRoute(
-              //   path: 'new',
-              //   name: RouteName.newTransaction,
-              //   parentNavigatorKey: rootNavigatorKey,
-              //   builder: (BuildContext context, GoRouterState state) {
-              //     final transaction = state.extra as Transaction;
-              //     return NewTransaction(transaction: transaction);
-              //   },
-              // )
-            ]
+            // routes: [
+            //   GoRoute(
+            //     path: 'detail',
+            //     name: RouteName.transactionDetails,
+            //     parentNavigatorKey: rootNavigatorKey,
+            //     builder: (BuildContext context, GoRouterState state) {
+            //       final transaction = state.extra as Transaction;
+            //       return TransactionDetails(transaction: transaction);
+            //     },
+            //   ),
+            //   GoRoute(
+            //     path: 'new',
+            //     name: RouteName.newTransaction,
+            //     parentNavigatorKey: rootNavigatorKey,
+            //     builder: (BuildContext context, GoRouterState state) {
+            //       return NewTransaction(
+            //         onAddTransaction: (newTransaction) {
+            //           context.pop();
+            //         },
+            //       );
+            //     },
+            //   )
+            // ]
           ),
         ],
       ),
