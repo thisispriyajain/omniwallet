@@ -11,13 +11,15 @@ import 'pages/login/views/forgot_password.dart';
 import 'navigation_bar.dart';
 import 'pages/router_pages/profile_page.dart';
 import 'pages/settings_page.dart';
-//import 'pages/login/signup_page.dart';
+import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
+import 'package:firebase_app_installations/firebase_app_installations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  print(await FirebaseInstallations.instance.getId());
   runApp(MyApp());
 }
 
