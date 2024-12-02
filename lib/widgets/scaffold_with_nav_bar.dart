@@ -30,8 +30,8 @@ class ScaffoldWithNavBar extends StatelessWidget {
             label: 'Tracking',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
+            icon: Icon(Icons.settings),
+            label: 'Settings',
           ),
         ],
         selectedItemColor: Colors.blue,
@@ -52,7 +52,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
     if (location.startsWith('/tracking')){
       return 2;
     }
-    if (location.startsWith('/profile')) {
+    if (location.startsWith('/settings')) {
       return 3;
     }
     return 0;
@@ -67,7 +67,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
       case 2:
         GoRouter.of(context).goNamed(RouteName.tracking);
       case 3:
-        GoRouter.of(context).goNamed(RouteName.profile);
+        GoRouter.of(context).goNamed(RouteName.settings);
     }
   }
 }

@@ -21,8 +21,8 @@ class CustomNavigationBar extends StatelessWidget{
           label: "Tracking",
         ),
         const BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: "Profile",
+          icon: Icon(Icons.settings),
+          label: "Settings",
         ),
       ],
       selectedItemColor: Colors.blue,
