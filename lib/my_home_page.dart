@@ -119,6 +119,7 @@ import 'pages/router_pages/profile_page.dart';
 import 'pages/login/views/signup_view.dart';
 import 'pages/router_pages/tracking_page.dart';
 import 'pages/router_pages/transactions_page.dart';
+import '../../model/transaction.dart' as model;
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -153,7 +154,9 @@ class _MyHomePageState extends State<MyHomePage> {
     //const ForgotPassword(),
     //const SignupView(),
     const HomePage(),
-    const TransactionsPage(),
+    TransactionsPage(
+          // transactions: model.Transaction.mockTransactions(), // Pass the required transactions
+    ),
     const TrackingPage(),
     const ProfilePage(),
     const SettingsPage(),
