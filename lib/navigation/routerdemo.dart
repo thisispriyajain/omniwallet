@@ -7,11 +7,17 @@ import 'package:omniwallet/widgets/scaffold_with_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../model/transaction.dart';
+import '../pages/router_pages/new_transaction.dart';
+import '../pages/router_pages/transaction_details.dart';
+
 class RouteName {
   static const home = "home";
   static const profile = "profile";
   static const tracking = "tracking";
   static const transaction = "transaction";
+  static const transactionDetails = "transactionDetails";
+  static const newTransaction = "newTransaction";
 }
 
 final GlobalKey<NavigatorState> rootNavigatorKey =
@@ -55,8 +61,32 @@ GoRouter routerDemo() {
             path: '/transactions',
             name: RouteName.transaction,
             builder: (BuildContext context, GoRouterState state) {
+              // return TransactionsPage(transactions: Transaction.mockTransactions());
               return const TransactionsPage();
             },
+            // routes: [
+            //   GoRoute(
+            //     path: 'detail',
+            //     name: RouteName.transactionDetails,
+            //     parentNavigatorKey: rootNavigatorKey,
+            //     builder: (BuildContext context, GoRouterState state) {
+            //       final transaction = state.extra as Transaction;
+            //       return TransactionDetails(transaction: transaction);
+            //     },
+            //   ),
+            //   GoRoute(
+            //     path: 'new',
+            //     name: RouteName.newTransaction,
+            //     parentNavigatorKey: rootNavigatorKey,
+            //     builder: (BuildContext context, GoRouterState state) {
+            //       return NewTransaction(
+            //         onAddTransaction: (newTransaction) {
+            //           context.pop();
+            //         },
+            //       );
+            //     },
+            //   )
+            // ]
           ),
         ],
       ),
