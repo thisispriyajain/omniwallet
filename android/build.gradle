@@ -16,3 +16,7 @@ subprojects {
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
+
+// dependencies {
+//     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0" // Update to latest version
+// }
