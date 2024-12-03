@@ -70,6 +70,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '707532126208',
     projectId: 'csen268-omniwallet',
     storageBucket: 'csen268-omniwallet.firebasestorage.app',
+    androidClientId: '707532126208-4jn2a58fiuql1akn1jv7252b8l7jm45j.apps.googleusercontent.com',
+    iosClientId: '707532126208-ip83kaa903vt8nl8dbgd13sc6r0c5oqr.apps.googleusercontent.com',
     iosBundleId: 'com.csen268.omniwallet',
   );
 

@@ -12,7 +12,20 @@
           "package_name": "com.csen268.omniwallet"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "707532126208-4jn2a58fiuql1akn1jv7252b8l7jm45j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.csen268.omniwallet",
+            "certificate_hash": "14af30d0f59e1a3dfff046c6775e29f9e88f0b02"
+          }
+        },
+        {
+          "client_id": "707532126208-irsdgatn3c3bdk23si3k1shor5lkfqhh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDV-G4Fy1PMJM3dyEHH-rMDNTtjm8crh6o"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "707532126208-irsdgatn3c3bdk23si3k1shor5lkfqhh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "707532126208-ip83kaa903vt8nl8dbgd13sc6r0c5oqr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.csen268.omniwallet"
+              }
+            }
+          ]
         }
       }
     }
