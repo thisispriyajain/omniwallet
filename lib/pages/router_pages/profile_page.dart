@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:omniwallet/navigation_bar.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +44,8 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Column(
                 children: [
                   ListTile(
@@ -60,23 +63,42 @@ class ProfilePage extends StatelessWidget {
                     title: Text("Settings"),
                   ),
                   Divider(),
-                  ListTile(
-                    leading: Icon(Icons.logout, color: Colors.red),
-                    title: Text("Log Out", style: TextStyle(color: Colors.red)),
+                  //
+                  Container(
+                    child: FilledButton(
+                      onPressed: () async {
+                        await FirebaseAuth.instance.signOut();
+                        await GoogleSignIn().signOut();
+                      },
+                      style: ButtonStyle(
+                          backgroundColor:
+                              WidgetStateProperty.all(Colors.white)),
+                      child: Row(
+                        children: [
+                          Icon(Icons.logout, color: Colors.red),
+                          SizedBox(width: 8),
+                          Text(
+                            "Log Out",
+                            style: TextStyle(color: Colors.red),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
+
                   SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed:  () {
-                    },
+                    onPressed: () {},
                     child: Text("Edit Profile"),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
-                      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                     ),
                   ),
                 ],
               ),
-            ), 
+            ),
           ],
         ),
       ),
