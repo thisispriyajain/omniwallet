@@ -194,6 +194,9 @@ class _HomePageState extends State<HomePage> {
                                 },
                                 margin: 8,
                               ),
+                              topTitles: SideTitles(
+                                showTitles: false, // Disable top titles to remove indices
+                                ),
                             ),
                             barGroups: barGroups,
                             maxY: groupedData.values
