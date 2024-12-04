@@ -32,3 +32,4 @@ with:
 ```
 if (MediaQuery.of(context).boldText)
 ```
+delete getTitles and redo
