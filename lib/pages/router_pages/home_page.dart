@@ -11,7 +11,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<BarChartGroupData> barGroups = [];
-  Map<String, Map<String, double>> groupedData = {}; // {date: {category: amount}}
+  Map<String, Map<String, double>> groupedData =
+      {}; // {date: {category: amount}}
   String latestTransactionDate = "";
   double totalMonthlySpending = 0.0;
   bool isLoading = true;
@@ -24,7 +25,8 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _fetchSpendingData() async {
     try {
-      final snapshot = await FirebaseFirestore.instance.collection('transactions').get();
+      final snapshot =
+          await FirebaseFirestore.instance.collection('transactions').get();
       Map<String, Map<String, double>> tempGroupedData = {};
       double tempTotalSpending = 0.0;
       String tempLatestTransactionDate = "";
@@ -47,7 +49,8 @@ class _HomePageState extends State<HomePage> {
           tempTotalSpending += amount.abs();
 
           // Update latest transaction date
-          if (tempLatestTransactionDate.isEmpty || date.compareTo(tempLatestTransactionDate) > 0) {
+          if (tempLatestTransactionDate.isEmpty ||
+              date.compareTo(tempLatestTransactionDate) > 0) {
             tempLatestTransactionDate = date;
           }
         }
@@ -62,7 +65,7 @@ class _HomePageState extends State<HomePage> {
           rods.add(BarChartRodData(
             toY: categoryEntry.value,
             width: 16,
-            colors: [_getCategoryColor(categoryEntry.key)],
+            color: _getCategoryColor(categoryEntry.key),
           ));
         });
         fetchedBarGroups.add(BarChartGroupData(x: index, barRods: rods));
@@ -175,33 +178,38 @@ class _HomePageState extends State<HomePage> {
                             borderData: FlBorderData(show: false),
                             gridData: FlGridData(drawVerticalLine: false),
                             titlesData: FlTitlesData(
-                              leftTitles: SideTitles(
-                                showTitles: true,
-                                interval: 20,
-                                getTitles: (value) => value.toInt().toString(),
-                                margin: 8,
-                                reservedSize: 40,
-                              ),
-                              bottomTitles: SideTitles(
-                                showTitles: true,
-                                getTitles: (value) {
-                                  // Match index to date
-                                  if (value.toInt() < groupedData.length) {
-                                    final date = groupedData.keys.toList()[value.toInt()];
-                                    return date.substring(0, 5); // MM/DD
-                                  }
-                                  return '';
-                                },
-                                margin: 8,
-                              ),
-                              topTitles: SideTitles(
-                                showTitles: false, // Disable top titles to remove indices
+                              leftTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  interval: 20,
+                                  // getTitles: (value) => value.toInt().toString(),
+                                  // margin: 8,
+                                  reservedSize: 40,
                                 ),
+                              ),
+                              bottomTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                showTitles: true,
+                                // getTitles: (value) {
+                                //   // Match index to date
+                                //   if (value.toInt() < groupedData.length) {
+                                //     final date = groupedData.keys.toList()[value.toInt()];
+                                //     return date.substring(0, 5); // MM/DD
+                                //   }
+                                //   return '';
+                                // },
+                                // margin: 8,
+                              )),
+                              topTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                showTitles:
+                                    false, // Disable top titles to remove indices
+                              )),
                             ),
                             barGroups: barGroups,
                             maxY: groupedData.values
-                                .expand((e) => e.values)
-                                .reduce((a, b) => a > b ? a : b) +
+                                    .expand((e) => e.values)
+                                    .reduce((a, b) => a > b ? a : b) +
                                 10,
                           ),
                         ),
