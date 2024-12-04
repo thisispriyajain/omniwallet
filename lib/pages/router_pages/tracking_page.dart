@@ -12,6 +12,7 @@ class TrackingPage extends StatefulWidget {
 class _TrackingPageState extends State<TrackingPage> {
   Map<String, double> transactionData = {};
   bool isLoading = true;
+  int touchedIndex = -1;
 
   @override
   void initState() {
@@ -27,15 +28,18 @@ class _TrackingPageState extends State<TrackingPage> {
         final category = doc['category'] as String;
         final amount = (doc['amount'] as num).toDouble();
 
-        // Only include positive amounts (spendings)
         if (amount < 0) {
           if (data.containsKey(category)) {
-            data[category] = (data[category]! + amount).abs();
+            data[category] = data[category]! + amount; // Accumulate raw negative amounts
           } else {
-            data[category] = amount.abs();
+            data[category] = amount;
           }
         }
       }
+
+      // Convert all accumulated amounts to positive for display purposes
+      data = data.map((key, value) => MapEntry(key, value.abs()));
+
       setState(() {
         transactionData = data;
         isLoading = false;
@@ -46,6 +50,29 @@ class _TrackingPageState extends State<TrackingPage> {
         isLoading = false;
       });
     }
+  }
+
+  List<PieChartSectionData> showingSections() {
+    int index = 0;
+    return transactionData.entries.map((entry) {
+      final isTouched = index == touchedIndex;
+      final double fontSize = isTouched ? 18 : 14;
+      final double radius = isTouched ? 60 : 50;
+      final color = _getCategoryColor(entry.key);
+      final section = PieChartSectionData(
+        color: color,
+        value: entry.value,
+        title: '${entry.key}: \$${entry.value.toStringAsFixed(0)}',
+        radius: radius,
+        titleStyle: TextStyle(
+          fontSize: fontSize,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+      );
+      index++;
+      return section;
+    }).toList();
   }
 
   @override
@@ -79,20 +106,21 @@ class _TrackingPageState extends State<TrackingPage> {
                         flex: 2,
                         child: PieChart(
                           PieChartData(
-                            sections: transactionData.entries.map((entry) {
-                              final color = _getCategoryColor(entry.key);
-                              return PieChartSectionData(
-                                color: color,
-                                value: entry.value,
-                                title: '${entry.key}: \$${entry.value.toStringAsFixed(0)}',
-                                radius: 50,
-                                titleStyle: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              );
-                            }).toList(),
+                            pieTouchData: PieTouchData(
+                              touchCallback: (FlTouchEvent event, PieTouchResponse? pieTouchResponse) {
+                                setState(() {
+                                  if (!event.isInterestedForInteractions || pieTouchResponse == null) {
+                                    touchedIndex = -1;
+                                    return;
+                                  }
+                                  touchedIndex = pieTouchResponse.touchedSection?.touchedSectionIndex ?? -1;
+                                });
+                              },
+                            ),
+                            borderData: FlBorderData(show: false),
+                            sectionsSpace: 0,
+                            centerSpaceRadius: 60,
+                            sections: showingSections(),
                           ),
                         ),
                       ),

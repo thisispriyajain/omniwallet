@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<BarChartGroupData> barGroups = [];
-  Map<String, Map<String, double>> groupedData = {}; // {date: {category: amount}}
+  Map<String, Map<String, double>> groupedData = {};
   String latestTransactionDate = "";
   double totalMonthlySpending = 0.0;
   bool isLoading = true;
@@ -29,48 +29,47 @@ class _HomePageState extends State<HomePage> {
       double tempTotalSpending = 0.0;
       String tempLatestTransactionDate = "";
 
-      // Process transactions
       for (var doc in snapshot.docs) {
         final date = doc['date'] as String;
         final category = doc['category'] as String;
         final amount = (doc['amount'] as num).toDouble();
 
         if (amount < 0) {
-          // Update grouped data for bar chart
           if (!tempGroupedData.containsKey(date)) {
             tempGroupedData[date] = {};
           }
           tempGroupedData[date]![category] =
               (tempGroupedData[date]![category] ?? 0) + amount.abs();
 
-          // Update total monthly spending
           tempTotalSpending += amount.abs();
 
-          // Update latest transaction date
           if (tempLatestTransactionDate.isEmpty || date.compareTo(tempLatestTransactionDate) > 0) {
             tempLatestTransactionDate = date;
           }
         }
       }
 
-      // Prepare bar chart data
+      // Sort the data by date
+      final sortedEntries = tempGroupedData.entries.toList()
+        ..sort((a, b) => a.key.compareTo(b.key));
+
       List<BarChartGroupData> fetchedBarGroups = [];
       int index = 0;
-      tempGroupedData.entries.forEach((entry) {
+      for (var entry in sortedEntries) {
         List<BarChartRodData> rods = [];
-        entry.value.entries.forEach((categoryEntry) {
+        for (var categoryEntry in entry.value.entries) {
           rods.add(BarChartRodData(
             toY: categoryEntry.value,
             width: 16,
             colors: [_getCategoryColor(categoryEntry.key)],
           ));
-        });
+        }
         fetchedBarGroups.add(BarChartGroupData(x: index, barRods: rods));
         index++;
-      });
+      }
 
       setState(() {
-        groupedData = tempGroupedData;
+        groupedData = Map.fromEntries(sortedEntries);
         barGroups = fetchedBarGroups;
         totalMonthlySpending = tempTotalSpending;
         latestTransactionDate = tempLatestTransactionDate;
@@ -83,6 +82,7 @@ class _HomePageState extends State<HomePage> {
       });
     }
   }
+
 
   Color _getCategoryColor(String category) {
     switch (category) {
@@ -185,17 +185,16 @@ class _HomePageState extends State<HomePage> {
                               bottomTitles: SideTitles(
                                 showTitles: true,
                                 getTitles: (value) {
-                                  // Match index to date
                                   if (value.toInt() < groupedData.length) {
                                     final date = groupedData.keys.toList()[value.toInt()];
-                                    return date.substring(0, 5); // MM/DD
+                                    return date.substring(0, 5);
                                   }
                                   return '';
                                 },
                                 margin: 8,
                               ),
                               topTitles: SideTitles(
-                                showTitles: false, // Disable top titles to remove indices
+                                showTitles: false,
                                 ),
                             ),
                             barGroups: barGroups,
