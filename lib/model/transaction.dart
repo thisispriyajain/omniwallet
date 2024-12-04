@@ -1,19 +1,3 @@
-// class Transaction {
-//   final String merchant;
-//   final String date;
-//   final String category;
-//   final double amount;
-//   final String description;
-
-//   Transaction({
-//     required this.merchant,
-//     required this.date,
-//     required this.category,
-//     required this.amount,
-//     required this.description,
-//   });
-// }
-
 class Transaction {
   final String merchant;
   final String date;
