@@ -102,7 +102,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const const Text(
+        title: const Text(
           'OmniWallet',
           style: TextStyle(
             color: Color(0xFF0093FF),

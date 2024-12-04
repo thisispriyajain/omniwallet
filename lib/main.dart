@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:omniwallet/blocs/authentication/bloc/authentication_bloc.dart';
-import 'package:omniwallet/blocs/authentication/bloc/authentication_bloc.dart';
 import 'package:omniwallet/firebase_options.dart';
 import 'package:omniwallet/navigation/routerdemo.dart';
 import 'package:omniwallet/pages/router_pages/home_page.dart';
@@ -9,8 +8,6 @@ import 'my_home_page.dart';
 import 'pages/login/landing_page.dart';
 import 'pages/login/views/forgot_password.dart';
 import 'navigation_bar.dart';
-import 'pages/router_pages/profile_page.dart';
-import 'pages/settings_page.dart';
 //import 'pages/login/signup_page.dart';
 import 'package:provider/provider.dart';
 
@@ -64,7 +61,7 @@ class MyApp extends StatelessWidget {
                 brightness: settingsState.isDarkMode ? Brightness.dark : Brightness.light,
               ),
             ),
-            routerConfig: routerDemo(authenticationBlocauthenticationBloc),
+            routerConfig: routerDemo(authenticationBloc),
           );
         },
       ),

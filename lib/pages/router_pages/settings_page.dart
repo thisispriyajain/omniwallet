@@ -130,7 +130,6 @@ class _SettingsPageState extends State<SettingsPage> {
  }
 }
 
-
 void _showNameEditDialog(BuildContext context) {
  final user = FirebaseAuth.instance.currentUser;
  final TextEditingController nameController = TextEditingController(text: user?.displayName);
