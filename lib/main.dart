@@ -9,9 +9,8 @@ import 'my_home_page.dart';
 import 'pages/login/landing_page.dart';
 import 'pages/login/views/forgot_password.dart';
 import 'navigation_bar.dart';
-import 'pages/router_pages/profile_page.dart';
-import 'pages/settings_page.dart';
 //import 'pages/login/signup_page.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +20,24 @@ void main() async {
   runApp(MyApp());
 }
 
+class SettingsState extends ChangeNotifier {
+  bool _isDarkMode = false;
+  bool _isBigFont = false;
+
+  bool get isDarkMode => _isDarkMode;
+  bool get isBigFont => _isBigFont;
+
+  void toggleDarkMode(bool value) {
+    _isDarkMode = value;
+    notifyListeners();
+  }
+
+  void toggleFontSize(bool value) {
+    _isBigFont = value;
+    notifyListeners();
+  }
+}
+
 class MyApp extends StatelessWidget {
   MyApp({super.key});
   final authenticationBloc = AuthenticationBloc();
@@ -28,13 +45,27 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'OmniWallet',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
+    return ChangeNotifierProvider(
+      create: (context) => SettingsState(),
+      child: Consumer<SettingsState>(
+        builder: (context, settingsState, child) {
+          return MaterialApp.router(
+            title: 'OmniWallet',
+            theme: ThemeData(
+              brightness: settingsState.isDarkMode ? Brightness.dark : Brightness.light,
+              textTheme: TextTheme(
+                bodyLarge: TextStyle(fontSize: settingsState.isBigFont ? 18.0 : 14.0),
+                bodyMedium: TextStyle(fontSize: settingsState.isBigFont ? 16.0: 12.0),
+              ),
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: Colors.blue,
+                brightness: settingsState.isDarkMode ? Brightness.dark : Brightness.light,
+              ),
+            ),
+            routerConfig: routerDemo(authenticationBloc),
+          );
+        },
       ),
-      routerConfig: routerDemo(authenticationBloc),
     );
   }
 }
