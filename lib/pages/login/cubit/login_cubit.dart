@@ -55,7 +55,7 @@ class LogInCubit extends Cubit<LogInState> {
     if (googleUser != null) {
       try {
         final GoogleSignInAuthentication? googleAuth =
-            await googleUser?.authentication;
+            await googleUser.authentication;
         final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth?.accessToken,
           idToken: googleAuth?.idToken,
@@ -68,6 +68,7 @@ class LogInCubit extends Cubit<LogInState> {
         return e.toString();
       }
     }
+    return null;
   }
 
   Future<String?> appleSignIn() async {
@@ -83,6 +84,7 @@ class LogInCubit extends Cubit<LogInState> {
       emit(SignInSuccess());
       //authenticationBloc.add(AuthenticationLoginEvent());
     }
+    return null;
   }
 
   Future<String?> forgotPassword({required String email}) async {

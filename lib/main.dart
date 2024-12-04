@@ -2,13 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:omniwallet/blocs/authentication/bloc/authentication_bloc.dart';
 import 'package:omniwallet/firebase_options.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:omniwallet/navigation/routerdemo.dart';
-import 'package:omniwallet/pages/router_pages/home_page.dart';
-import 'my_home_page.dart';
-import 'pages/login/landing_page.dart';
-import 'pages/login/views/forgot_password.dart';
-import 'navigation_bar.dart';
 //import 'pages/login/signup_page.dart';
 import 'package:provider/provider.dart';
 

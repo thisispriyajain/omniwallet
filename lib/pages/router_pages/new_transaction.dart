@@ -5,8 +5,7 @@ import '../../model/transaction.dart' as model;
 class NewTransaction extends StatefulWidget {
   final Function(model.Transaction) onAddTransaction;
 
-  const NewTransaction({Key? key, required this.onAddTransaction})
-      : super(key: key);
+  const NewTransaction({super.key, required this.onAddTransaction});
 
   @override
   _NewTransactionPageState createState() => _NewTransactionPageState();
@@ -138,8 +137,8 @@ class _NewTransactionPageState extends State<NewTransaction> {
                   controller: _merchantController,
                   decoration: InputDecoration(
                     hintText: 'Merchant',
-                    hintStyle: TextStyle(
-                      color: const Color.fromARGB(255, 189, 189, 189),
+                    hintStyle: const TextStyle(
+                      color: Color.fromARGB(255, 189, 189, 189),
                       fontSize: 18,
                       fontWeight: FontWeight.w400,
                     ),
@@ -179,8 +178,8 @@ class _NewTransactionPageState extends State<NewTransaction> {
                   },
                   decoration: InputDecoration(
                     labelText: 'Category',
-                    hintStyle: TextStyle(
-                      color: const Color.fromARGB(255, 189, 189, 189),
+                    hintStyle: const TextStyle(
+                      color: Color.fromARGB(255, 189, 189, 189),
                       fontSize: 18,
                       fontWeight: FontWeight.w400,
                     ),
@@ -207,8 +206,8 @@ class _NewTransactionPageState extends State<NewTransaction> {
                   controller: _amountController,
                   decoration: InputDecoration(
                     hintText: 'Amount',
-                      hintStyle: TextStyle(
-                      color: const Color.fromARGB(255, 189, 189, 189),
+                      hintStyle: const TextStyle(
+                      color: Color.fromARGB(255, 189, 189, 189),
                       fontSize: 18,
                       fontWeight: FontWeight.w400,
                     ),
@@ -238,8 +237,8 @@ class _NewTransactionPageState extends State<NewTransaction> {
                   controller: _descriptionController,
                   decoration: InputDecoration(
                     hintText: 'Description',
-                    hintStyle: TextStyle(
-                      color: const Color.fromARGB(255, 189, 189, 189), 
+                    hintStyle: const TextStyle(
+                      color: Color.fromARGB(255, 189, 189, 189), 
                       fontSize: 18,
                       fontWeight: FontWeight.w400,
                     ),
@@ -277,7 +276,7 @@ class _NewTransactionPageState extends State<NewTransaction> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF0093FF),
                       ),
-                      child: Text(
+                      child: const Text(
                         'Add',
                         style: TextStyle(color: Colors.white),
                         ),

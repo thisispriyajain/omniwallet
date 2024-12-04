@@ -12,7 +12,7 @@ import 'transaction_details.dart';
 
 
 class TransactionsPage extends StatefulWidget {
-  const TransactionsPage({Key? key}) : super(key: key);
+  const TransactionsPage({super.key});
 
   @override
   _TransactionsPageState createState() => _TransactionsPageState();
@@ -124,7 +124,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       ListTile(
-                        title: Text(
+                        title: const Text(
                           'Add a Transaction',
                           style: TextStyle(color: Color(0xFF0093FF)),
                         ),
@@ -145,14 +145,14 @@ class _TransactionsPageState extends State<TransactionsPage> {
 
                       ),
                       Divider(
-                        color: Color(0xFF0093FF).withOpacity(0.2),
+                        color: const Color(0xFF0093FF).withOpacity(0.2),
                         thickness: 1,
                         indent: 20,
                         endIndent: 20,
                       ),
                       ListTile(
                         leading: const Icon(Icons.qr_code_scanner, color: Color(0xFF0093FF)),
-                        title: Text(
+                        title: const Text(
                           'Scan',
                           style: TextStyle(color: Color(0xFF0093FF)),
                         ),
@@ -248,7 +248,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             ListTile(
-                              title: Center(
+                              title: const Center(
                                 child: Text(
                                   'Food',
                                   style: TextStyle(color: Color(0xFF0093FF)),
@@ -260,13 +260,13 @@ class _TransactionsPageState extends State<TransactionsPage> {
                               },
                             ),
                             Divider(
-                              color: Color(0xFF0093FF).withOpacity(0.2),
+                              color: const Color(0xFF0093FF).withOpacity(0.2),
                               thickness: 1,
                               indent: 20,
                               endIndent: 20,
                             ),
                             ListTile(
-                              title: Center(
+                              title: const Center(
                                 child: Text(
                                   'Bill',
                                   style: TextStyle(color: Color(0xFF0093FF)),
@@ -278,14 +278,14 @@ class _TransactionsPageState extends State<TransactionsPage> {
                               },
                             ),
                             Divider(
-                              color: Color(0xFF0093FF).withOpacity(0.2),
+                              color: const Color(0xFF0093FF).withOpacity(0.2),
                               thickness: 1,
                               indent: 20,
                               endIndent: 20,
                             ),
                             ListTile(
-                              title: Center(
-                                child: const Text(
+                              title: const Center(
+                                child: Text(
                                   'Income',
                                   style: TextStyle(color: Color(0xFF0093FF)),
                                 ),

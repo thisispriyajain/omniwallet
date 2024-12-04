@@ -36,8 +36,7 @@ class TransactionDetails extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              (isSpending ? '- ' : '+ ') +
-                  '\$${transaction.amount.abs().toStringAsFixed(2)}',
+              '${isSpending ? '- ' : '+ '}\$${transaction.amount.abs().toStringAsFixed(2)}',
               style: TextStyle(
                 fontSize: 36.0,
                 fontWeight: FontWeight.bold,
@@ -45,22 +44,22 @@ class TransactionDetails extends StatelessWidget {
               ),
             ),
             Divider(
-              color: Color(0xFF0093FF).withOpacity(0.2),
+              color: const Color(0xFF0093FF).withOpacity(0.2),
               thickness: 1,
             ),
             _buildDetailRow('Merchant', transaction.merchant),
             Divider(
-              color: Color(0xFF0093FF).withOpacity(0.2),
+              color: const Color(0xFF0093FF).withOpacity(0.2),
               thickness: 1,
             ),
-            _buildDetailRow('Date', transaction.date as String),
+            _buildDetailRow('Date', transaction.date),
             Divider(
-              color: Color(0xFF0093FF).withOpacity(0.2),
+              color: const Color(0xFF0093FF).withOpacity(0.2),
               thickness: 1,
             ),
             _buildDetailRow('Category', transaction.category),
             Divider(
-              color: Color(0xFF0093FF).withOpacity(0.2),
+              color: const Color(0xFF0093FF).withOpacity(0.2),
               thickness: 1,
             ),
             _buildDetailRow('Description', transaction.description),

@@ -64,12 +64,12 @@ class _SignupViewState extends State<SignupView> {
         key: _formKey,
         child: Center(
           child: Container(
-            margin: EdgeInsets.all(20),
+            margin: const EdgeInsets.all(20),
             padding: const EdgeInsets.all(20.0),
             width: double.infinity,
             child: Column(
               children: [
-                SizedBox(height: 45),
+                const SizedBox(height: 45),
                 const Text(
                   "Sign up",
                   style: TextStyle(
@@ -83,7 +83,7 @@ class _SignupViewState extends State<SignupView> {
                     firstChild: Container(),
                     secondChild: Container(
                       width: double.infinity,
-                      margin: EdgeInsets.only(left: 20, right: 20),
+                      margin: const EdgeInsets.only(left: 20, right: 20),
                       padding: const EdgeInsets.all(20.0),
                       decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.errorContainer,
@@ -98,25 +98,25 @@ class _SignupViewState extends State<SignupView> {
                                       .onErrorContainer)),
                     ),
                     crossFadeState: crossFadeState,
-                    duration: Duration(milliseconds: 300)),
+                    duration: const Duration(milliseconds: 300)),
                 TextFormField(
                   controller: fullnameController,
-                  decoration: InputDecoration(labelText: "Name"),
+                  decoration: const InputDecoration(labelText: "Name"),
                   onSaved: (newValue) {
                     name = fullnameController.text;
                   },
                   validator: (value) => null,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextFormField(
                   controller: emailController,
-                  decoration: InputDecoration(labelText: "Email address"),
+                  decoration: const InputDecoration(labelText: "Email address"),
                   onSaved: (newValue) {
                     email = emailController.text;
                   },
                   validator: (value) => null,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 _buildPasswordField(
                   controller: passwordController,
                   labelText: "Password",
@@ -127,7 +127,7 @@ class _SignupViewState extends State<SignupView> {
                     });
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 _buildPasswordField(
                     controller: confirmPasswordController,
                     labelText: "Confirm password",
@@ -137,10 +137,10 @@ class _SignupViewState extends State<SignupView> {
                         _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
                       });
                     }),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 Container(
                   width: double.maxFinite,
-                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
                   child: FilledButton(
                       onPressed: () async {
                         if (_formKey.currentState?.validate() ?? false) {
@@ -160,7 +160,7 @@ class _SignupViewState extends State<SignupView> {
                             await showDialog(
                                 context: context,
                                 builder: (context) {
-                                  return AlertDialog(
+                                  return const AlertDialog(
                                     title: Text("Thank you for signing up!"),
                                     content: Text(
                                         "Please check your email for verifying your email address."),
@@ -170,24 +170,24 @@ class _SignupViewState extends State<SignupView> {
                         }
                       },
                       style: FilledButton.styleFrom(
-                        backgroundColor: Color(0xFF0093FF),
+                        backgroundColor: const Color(0xFF0093FF),
                         foregroundColor: Colors.white,
                       ),
-                      child: Text("Sign up")),
+                      child: const Text("Sign up")),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Already have an account?",
+                    const Text("Already have an account?",
                         style: TextStyle(
                           color: Colors.black,
                         )),
                     TextButton(
+                      onPressed: widget.signInRequestCallback,
                       child: Text("Sign in",
                           style: TextStyle(
                             color: Color(0xFF0093FF),
                           )),
-                      onPressed: widget.signInRequestCallback,
                     )
                   ],
                 )

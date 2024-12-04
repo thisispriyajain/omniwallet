@@ -72,10 +72,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: Theme.of(context).colorScheme.error)),
                     crossFadeState: crossFadeState,
-                    duration: Duration(milliseconds: 300)),
+                    duration: const Duration(milliseconds: 300)),
                 TextFormField(
                   controller: emailController,
-                  decoration: InputDecoration(labelText: "Email address"),
+                  decoration: const InputDecoration(labelText: "Email address"),
                   onSaved: (newValue) {
                     email = emailController.text;
                   },
@@ -83,7 +83,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 ),
                 Container(
                   width: double.maxFinite,
-                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
                   child: FilledButton(
                       onPressed: () async {
                         if (_formKey.currentState?.validate() ?? false) {
@@ -100,22 +100,22 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 context: context,
                                 builder: (context) {
                                   return AlertDialog(
-                                    title: Text("Password Reset"),
-                                    content: Text(
+                                    title: const Text("Password Reset"),
+                                    content: const Text(
                                       "Please check your email for a password reseet link."
                                       " Once you set a new password, you can login in.",
                                     ),
                                     actions: [
                                       FilledButton(
+                                        style: FilledButton.styleFrom(
+                                            backgroundColor: const Color(0xFF0093FF)),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
                                         child: Text(
                                           "OK",
                                           style: TextStyle(color: Colors.white),
                                         ),
-                                        style: FilledButton.styleFrom(
-                                            backgroundColor: Color(0xFF0093FF)),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
                                       )
                                     ],
                                   );
@@ -124,21 +124,21 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         }
                       },
                       style: FilledButton.styleFrom(
-                        backgroundColor: Color(0xFF0093FF),
+                        backgroundColor: const Color(0xFF0093FF),
                         foregroundColor: Colors.white,
                       ),
-                      child: Text("Password Reset")),
+                      child: const Text("Password Reset")),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Got your password?"),
+                    const Text("Got your password?"),
                     TextButton(
+                      onPressed: widget.cancelRequestCallback,
                       child: Text("Log in",
                           style: TextStyle(
                             color: Color(0xFF0093FF),
                           )),
-                      onPressed: widget.cancelRequestCallback,
                     )
                   ],
                 )

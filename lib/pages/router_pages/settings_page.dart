@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
@@ -107,6 +106,9 @@ class _SettingsPageState extends State<SettingsPage> {
            title: const Text('Name'),
            subtitle: Text(FirebaseAuth.instance.currentUser?.displayName ?? 'No name set'),
            leading: const Icon(Icons.person, color: Colors.blue),
+           onTap: () {
+            _showNameEditDialog(context);
+           },
          ),
          ListTile(
            title: const Text('Email'),
