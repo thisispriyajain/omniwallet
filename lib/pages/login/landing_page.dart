@@ -41,7 +41,7 @@ class _LandingPageState extends State<LandingPage> {
                 width: 150,
                 height: 150,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               const Text(
                 'Welcome',
                 style: TextStyle(
@@ -50,12 +50,12 @@ class _LandingPageState extends State<LandingPage> {
                   color: Color(0xFF0093FF),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 // Blue rectangle
                 width: double.infinity,
                 height: 200,
-                color: Color(0xFF0093FF),
+                color: const Color(0xFF0093FF),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -65,7 +65,7 @@ class _LandingPageState extends State<LandingPage> {
                       hintText: 'User ID',
                       icon: Icons.account_circle,
                     ),
-                    SizedBox(height: 30), // Space between fields
+                    const SizedBox(height: 30), // Space between fields
                     // Second TextField for password with visibility toggle
                     _buildPasswordField(
                       hintText: 'Password',
@@ -74,7 +74,7 @@ class _LandingPageState extends State<LandingPage> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                   height:
                       30), // Space between the blue rectangle and the button
               ElevatedButton(
@@ -82,8 +82,8 @@ class _LandingPageState extends State<LandingPage> {
                   // Add the action for the button here
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF0093FF), // Button color
-                  minimumSize: Size(125, 50), // Button size
+                  backgroundColor: const Color(0xFF0093FF), // Button color
+                  minimumSize: const Size(125, 50), // Button size
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12), // Rounded corners
                   ),
@@ -96,7 +96,7 @@ class _LandingPageState extends State<LandingPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               // Row for "Forgot Password" and "Sign Up" texts
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -155,17 +155,17 @@ class _LandingPageState extends State<LandingPage> {
           fillColor: Colors.white,
           prefixIcon: Icon(
             icon,
-            color: Color(0xFF0093FF),
+            color: const Color(0xFF0093FF),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               color: Colors.transparent,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               color: Color(0xFF0093FF),
               width: 2,
             ),
@@ -194,12 +194,12 @@ class _LandingPageState extends State<LandingPage> {
           fillColor: Colors.white,
           prefixIcon: Icon(
             icon,
-            color: Color(0xFF0093FF),
+            color: const Color(0xFF0093FF),
           ),
           suffixIcon: IconButton(
             icon: Icon(
               _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-              color: Color(0xFF0093FF),
+              color: const Color(0xFF0093FF),
             ),
             onPressed: () {
               setState(() {
@@ -209,13 +209,13 @@ class _LandingPageState extends State<LandingPage> {
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               color: Colors.transparent,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               color: Color(0xFF0093FF),
               width: 2,
             ),

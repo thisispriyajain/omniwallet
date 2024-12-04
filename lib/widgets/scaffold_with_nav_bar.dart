@@ -34,6 +34,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
             label: 'Settings',
           ),
         ],
+        backgroundColor: Colors.blue,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.grey,
         currentIndex: _calculateSelectedIndex(context),

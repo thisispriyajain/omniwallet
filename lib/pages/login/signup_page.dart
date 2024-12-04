@@ -44,7 +44,7 @@ class _SignupPageState extends State<SignupPage> {
         child: Center(
           child: Column(
             children: [
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
               const Text(
                 "Sign up",
                 style: TextStyle(
@@ -53,15 +53,15 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 65),
+              const SizedBox(height: 65),
               _buildTextField(
                 hintText: 'Full name',
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               _buildTextField(
                 hintText: 'Email address',
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               _buildPasswordField(
                 hintText: 'Password',
                 isVisible: _isPasswordVisible,
@@ -71,7 +71,7 @@ class _SignupPageState extends State<SignupPage> {
                   });
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               _buildPasswordField(
                 hintText: 'Confirm password',
                 isVisible: _isConfirmPasswordVisible,
@@ -81,12 +81,12 @@ class _SignupPageState extends State<SignupPage> {
                   });
                 },
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF0093FF),
-                  minimumSize: Size(200, 40),
+                  backgroundColor: const Color(0xFF0093FF),
+                  minimumSize: const Size(200, 40),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -119,11 +119,11 @@ class _SignupPageState extends State<SignupPage> {
           ),
           contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFF0093FF), width: 2),
+            borderSide: const BorderSide(color: Color(0xFF0093FF), width: 2),
             borderRadius: BorderRadius.circular(6),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFF0093FF), width: 2),
+            borderSide: const BorderSide(color: Color(0xFF0093FF), width: 2),
             borderRadius: BorderRadius.circular(6),
           ),
         ),
@@ -151,16 +151,16 @@ class _SignupPageState extends State<SignupPage> {
           suffixIcon: IconButton(
             icon: Icon(
               isVisible ? Icons.visibility : Icons.visibility_off,
-              color: Color(0xFF0093FF),
+              color: const Color(0xFF0093FF),
             ),
             onPressed: onToggle,
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFF0093FF), width: 2),
+            borderSide: const BorderSide(color: Color(0xFF0093FF), width: 2),
             borderRadius: BorderRadius.circular(6),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFF0093FF), width: 2),
+            borderSide: const BorderSide(color: Color(0xFF0093FF), width: 2),
             borderRadius: BorderRadius.circular(6),
           ),
         ),
