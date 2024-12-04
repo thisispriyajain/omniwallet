@@ -2,63 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../model/transaction.dart';
 
-
-// class TransactionDetailPage extends StatelessWidget {
-//   final Transaction transaction;
-
-//   const TransactionDetailPage({super.key, required this.transaction});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text(
-//           'Transaction Details',
-//           style: TextStyle(color: Color(0xFF0093FF)),
-//         ),
-//         centerTitle: true,
-//       ),
-//       body: Padding(
-//         padding: const EdgeInsets.all(16.0),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             Text(
-//               'Merchant: ${transaction.merchant}',
-//               style: const TextStyle(fontSize: 18.0),
-//             ),
-//             const SizedBox(height: 8.0),
-//             Text(
-//               'Date: ${transaction.date}',
-//               style: const TextStyle(fontSize: 18.0),
-//             ),
-//             const SizedBox(height: 8.0),
-//             Text(
-//               'Category: ${transaction.category}',
-//               style: const TextStyle(fontSize: 18.0),
-//             ),
-//             const SizedBox(height: 8.0),
-//             Text(
-//               'Amount: \$${transaction.amount.toStringAsFixed(2)}',
-//               style: TextStyle(
-//                 fontSize: 18.0,
-//                 color: transaction.amount < 0 ? Colors.red : Colors.green,
-//               ),
-//             ),
-//             const SizedBox(height: 8.0),
-//             Text(
-//               'Description: ${transaction.description}',
-//               style: const TextStyle(fontSize: 18.0),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
-
 class TransactionDetails extends StatelessWidget {
   final Transaction transaction;
 
@@ -92,7 +35,6 @@ class TransactionDetails extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Amount at the top
             Text(
               (isSpending ? '- ' : '+ ') +
                   '\$${transaction.amount.abs().toStringAsFixed(2)}',
