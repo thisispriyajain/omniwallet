@@ -115,7 +115,7 @@ class _LandingPageState extends State<LandingView> {
             //crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/app_icon.png',
+                'assets/icons/app_icon.png',
                 width: 150,
                 height: 150,
               ),
