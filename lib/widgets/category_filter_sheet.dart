@@ -12,10 +12,10 @@ class CategoryFilterSheet extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         ListTile(
-          title: const Center(
+          title: Center(
             child: Text(
               'Food',
-              style: TextStyle(color: Color(0xFF0093FF)),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Color(0xFF0093FF)),
             ),
           ),
           onTap: () {
@@ -30,10 +30,10 @@ class CategoryFilterSheet extends StatelessWidget {
           endIndent: 20,
         ),
         ListTile(
-          title: const Center(
+          title: Center(
             child: Text(
               'Bill',
-              style: TextStyle(color: Color(0xFF0093FF)),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Color(0xFF0093FF)),
             ),
           ),
           onTap: () {
@@ -48,10 +48,10 @@ class CategoryFilterSheet extends StatelessWidget {
           endIndent: 20,
         ),
         ListTile(
-          title: const Center(
+          title: Center(
             child: Text(
               'Income',
-              style: TextStyle(color: Color(0xFF0093FF)),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Color(0xFF0093FF)),
             ),
           ),
           onTap: () {

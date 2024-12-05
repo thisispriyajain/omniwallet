@@ -13,11 +13,10 @@ class TransactionDetails extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Transaction Details',
-          style: TextStyle(
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             color: Color(0xFF0093FF),
-            fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -37,8 +36,7 @@ class TransactionDetails extends StatelessWidget {
           children: [
             Text(
               '${isSpending ? '- ' : '+ '}\$${transaction.amount.abs().toStringAsFixed(2)}',
-              style: TextStyle(
-                fontSize: 36.0,
+              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: isSpending ? Colors.red : Colors.green,
               ),
@@ -47,29 +45,29 @@ class TransactionDetails extends StatelessWidget {
               color: const Color(0xFF0093FF).withOpacity(0.2),
               thickness: 1,
             ),
-            _buildDetailRow('Merchant', transaction.merchant),
+            _buildDetailRow(context, 'Merchant', transaction.merchant),
             Divider(
               color: const Color(0xFF0093FF).withOpacity(0.2),
               thickness: 1,
             ),
-            _buildDetailRow('Date', transaction.date),
+            _buildDetailRow(context, 'Date', transaction.date),
             Divider(
               color: const Color(0xFF0093FF).withOpacity(0.2),
               thickness: 1,
             ),
-            _buildDetailRow('Category', transaction.category),
+            _buildDetailRow(context, 'Category', transaction.category),
             Divider(
               color: const Color(0xFF0093FF).withOpacity(0.2),
               thickness: 1,
             ),
-            _buildDetailRow('Description', transaction.description),
+            _buildDetailRow(context, 'Description', transaction.description),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildDetailRow(String label, String value) {
+  Widget _buildDetailRow(BuildContext context, String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -77,16 +75,14 @@ class TransactionDetails extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 16.0, 
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               fontWeight: FontWeight.bold,
               color: Color(0xFF0093FF),
-              ),
+            ),
           ),
           Text(
             value,
-            style: const TextStyle(
-              fontSize: 16.0,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               color: Color(0xFF0093FF),
             ),
           ),

@@ -21,6 +21,22 @@ class SettingsState extends ChangeNotifier {
   bool get isDarkMode => _isDarkMode;
   bool get isBigFont => _isBigFont;
 
+  ThemeData get currentTheme => ThemeData(
+    brightness: _isDarkMode ? Brightness.dark : Brightness.light,
+    textTheme: TextTheme(
+      bodyLarge: TextStyle(fontSize: _isBigFont ? 20.0: 16.0),
+      bodyMedium: TextStyle(fontSize: _isBigFont ? 18.0 : 14.0),
+      bodySmall: TextStyle(fontSize: _isBigFont ? 16.0: 12.0),
+      headlineLarge: TextStyle(fontSize: _isBigFont ? 26.0: 22.0),
+      headlineMedium: TextStyle(fontSize: _isBigFont ? 22.0: 18.0),
+      headlineSmall: TextStyle(fontSize: _isBigFont ? 20.0: 16.0),
+    ),
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Colors.blue,
+      brightness: _isDarkMode ? Brightness.dark : Brightness.light,
+    ),
+  );
+
   void toggleDarkMode(bool value) {
     _isDarkMode = value;
     notifyListeners();
@@ -40,22 +56,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => SettingsState(),
+      create: (_) => SettingsState(),
       child: Consumer<SettingsState>(
         builder: (context, settingsState, child) {
           return MaterialApp.router(
             title: 'OmniWallet',
-            theme: ThemeData(
-              brightness: settingsState.isDarkMode ? Brightness.dark : Brightness.light,
-              textTheme: TextTheme(
-                bodyLarge: TextStyle(fontSize: settingsState.isBigFont ? 18.0 : 14.0),
-                bodyMedium: TextStyle(fontSize: settingsState.isBigFont ? 16.0: 12.0),
-              ),
-              colorScheme: ColorScheme.fromSeed(
-                seedColor: Colors.blue,
-                brightness: settingsState.isDarkMode ? Brightness.dark : Brightness.light,
-              ),
-            ),
+            theme: settingsState.currentTheme,
             routerConfig: routerDemo(authenticationBloc),
           );
         },

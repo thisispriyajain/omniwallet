@@ -64,28 +64,28 @@ GoRouter routerDemo(AuthenticationBloc authenticationBloc) {
       ShellRoute(
         navigatorKey: shellNavigatorKey,
         builder: (BuildContext context, GoRouterState state, Widget child) {
-          return ScaffoldWithNavBar(child: child);
+          return ScaffoldWithNavBar(key: UniqueKey(), child: child);
         },
         routes: <RouteBase>[
           GoRoute(
             path: '/home',
             name: RouteName.home,
             builder: (BuildContext context, GoRouterState state) {
-              return const HomePage();
+              return HomePage(key: UniqueKey());
             },
           ),
           GoRoute(
             path: '/settings',
             name: RouteName.settings,
             builder: (BuildContext context, GoRouterState state) {
-              return const SettingsPage();
+              return SettingsPage(key: UniqueKey());
             },
           ),
           GoRoute(
             path: '/tracking',
             name: RouteName.tracking,
             builder: (BuildContext context, GoRouterState state) {
-              return const TrackingPage();
+              return TrackingPage(key: UniqueKey());
             },
           ),
           GoRoute(
@@ -93,7 +93,7 @@ GoRouter routerDemo(AuthenticationBloc authenticationBloc) {
             name: RouteName.transaction,
             builder: (BuildContext context, GoRouterState state) {
               // return TransactionsPage(transactions: Transaction.mockTransactions());
-              return const TransactionsPage();
+              return TransactionsPage(key: UniqueKey());
             },
             // routes: [
             //   GoRoute(

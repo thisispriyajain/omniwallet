@@ -33,11 +33,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           'OmniWallet',
-          style: TextStyle(
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             color: Color(0xFF0093FF),
-            fontSize: 45,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -58,7 +57,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 const Text(
                   "We'll send your password reset info to the email address linked to your account.",
                   style: TextStyle(
-                    fontSize: 25,
+                    fontSize: 18,
                     fontWeight: FontWeight.normal,
                     color: Colors.black,
                   ),

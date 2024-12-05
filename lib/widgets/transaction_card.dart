@@ -45,16 +45,14 @@ class TransactionCard extends StatelessWidget {
                 children: [
                   Text(
                     transaction.merchant,
-                    style: const TextStyle(
-                      fontSize: 16.0,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Color(0xFF0093FF),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     transaction.date,
-                    style: const TextStyle(
-                      fontSize: 14.0,
+                    style:  Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Colors.grey,
                     ),
                   ),
@@ -64,8 +62,7 @@ class TransactionCard extends StatelessWidget {
                 children: [
                   Text(
                     '${isSpending ? '- ' : '+ '}\$${transaction.amount.abs().toStringAsFixed(2)}',
-                    style: TextStyle(
-                      fontSize: 16.0,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: isSpending ? Colors.red : Colors.green,
                     ),

@@ -43,11 +43,10 @@ class _LandingPageState extends State<LandingView> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           'OmniWallet',
-          style: TextStyle(
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             color: Color(0xFF0093FF),
-            fontSize: 45, // Increase text size
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -68,10 +67,9 @@ class _LandingPageState extends State<LandingView> {
                 width: 150,
                 height: 150,
               ),
-              const Text(
+              Text(
                 'Welcome',
-                style: TextStyle(
-                  fontSize: 45,
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                   fontWeight: FontWeight.normal,
                   color: Color(0xFF0093FF),
                 ),

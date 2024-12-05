@@ -78,9 +78,11 @@ class _HomePageState extends State<HomePage> {
       });
     } catch (e) {
       print('Error fetching spending data: $e');
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -101,11 +103,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'OmniWallet',
-          style: TextStyle(
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             color: Color(0xFF0093FF),
-            fontSize: 30,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -131,20 +132,18 @@ class _HomePageState extends State<HomePage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              const Text(
+                              Text(
                                 "Hello, Priya",
-                                style: TextStyle(
+                                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                                   color: Colors.white,
-                                  fontSize: 24,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               const SizedBox(height: 8),
                               Text(
                                 "You've spent \$${totalMonthlySpending.toStringAsFixed(2)}",
-                                style: const TextStyle(
+                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                   color: Colors.white,
-                                  fontSize: 18,
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
@@ -153,9 +152,8 @@ class _HomePageState extends State<HomePage> {
                                 latestTransactionDate.isNotEmpty
                                     ? latestTransactionDate
                                     : "No transactions",
-                                style: const TextStyle(
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                   color: Colors.white,
-                                  fontSize: 16,
                                 ),
                               ),
                             ],
@@ -163,10 +161,11 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       const SizedBox(height: 32),
-                      const Text(
+                      Text(
                         "Daily Spending",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 16),
                       Expanded(
