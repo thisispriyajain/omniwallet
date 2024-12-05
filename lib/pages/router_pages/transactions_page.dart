@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -9,7 +10,6 @@ import '../../widgets/category_filter_sheet.dart';
 import '../../widgets/transaction_card.dart';
 import 'new_transaction.dart';
 import 'transaction_details.dart';
-
 
 class TransactionsPage extends StatefulWidget {
   const TransactionsPage({Key? key}) : super(key: key);
@@ -29,9 +29,18 @@ class _TransactionsPageState extends State<TransactionsPage> {
     super.initState();
     _fetchTransactions();
   }
+
   Future<void> _fetchTransactions() async {
     try {
-      final snapshot = await FirebaseFirestore.instance.collection('transactions').get();
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw 'No authenticated user.';
+      }
+      final snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection("transactions")
+          .get();
       final transactions = snapshot.docs.map((doc) {
         final data = doc.data();
         return model.Transaction(
@@ -53,12 +62,12 @@ class _TransactionsPageState extends State<TransactionsPage> {
       );
     }
   }
+
   void _filterTransactions(String query) {
     setState(() {
       _filteredTransactions = _transactions
-          .where((transaction) => transaction.merchant
-              .toLowerCase()
-              .contains(query.toLowerCase()))
+          .where((transaction) =>
+              transaction.merchant.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -117,7 +126,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
               showModalBottomSheet(
                 context: context,
                 shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(16.0)),
                 ),
                 builder: (context) {
                   return Column(
@@ -129,6 +139,13 @@ class _TransactionsPageState extends State<TransactionsPage> {
                           style: TextStyle(color: Color(0xFF0093FF)),
                         ),
                         onTap: () {
+                          final user = FirebaseAuth.instance.currentUser;
+                          if (user == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('No authenticated user.')),
+                            );
+                            return;
+                          }
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -136,13 +153,14 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                 onAddTransaction: (newTransaction) {
                                   setState(() {
                                     _transactions.add(newTransaction);
+                                    _filteredTransactions.add(newTransaction);
                                   });
                                 },
+                                userID: user.uid,
                               ),
                             ),
                           );
                         },
-
                       ),
                       Divider(
                         color: Color(0xFF0093FF).withOpacity(0.2),
@@ -151,7 +169,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
                         endIndent: 20,
                       ),
                       ListTile(
-                        leading: const Icon(Icons.qr_code_scanner, color: Color(0xFF0093FF)),
+                        leading: const Icon(Icons.qr_code_scanner,
+                            color: Color(0xFF0093FF)),
                         title: Text(
                           'Scan',
                           style: TextStyle(color: Color(0xFF0093FF)),
@@ -184,7 +203,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
-                  borderSide: const BorderSide(color: Color(0xFF0093FF), width: 2.0),
+                  borderSide:
+                      const BorderSide(color: Color(0xFF0093FF), width: 2.0),
                 ),
               ),
               style: const TextStyle(color: Color(0xFF0093FF)),
@@ -240,7 +260,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
                     showModalBottomSheet(
                       context: context,
                       shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(16.0)),
                       ),
                       builder: (context) {
                         return Column(
@@ -313,55 +334,63 @@ class _TransactionsPageState extends State<TransactionsPage> {
             const SizedBox(height: 16.0),
             Expanded(
               child: _transactions.isEmpty
-              ? const Center(
-                  child: Text(
-                    'No Transactions Found',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                )
-              : Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListView.builder(
-                    itemCount: _filteredTransactions.length,
-                    itemBuilder: (context, index) {
-                      final transaction = _filteredTransactions[index];
-                      return TransactionCard(
-                        transaction: transaction,
-                        onDelete: () async {
-                          try {
-                            await FirebaseFirestore.instance
-                                .collection('transactions')
-                                .where('merchant', isEqualTo: transaction.merchant)
-                                .where('date', isEqualTo: transaction.date)
-                                .get()
-                                .then((querySnapshot) {
-                              for (var doc in querySnapshot.docs) {
-                                doc.reference.delete();
+                  ? const Center(
+                      child: Text(
+                        'No Transactions Found',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListView.builder(
+                        itemCount: _filteredTransactions.length,
+                        itemBuilder: (context, index) {
+                          final transaction = _filteredTransactions[index];
+                          return TransactionCard(
+                            transaction: transaction,
+                            onDelete: () async {
+                              try {
+                                final user = FirebaseAuth.instance.currentUser;
+                                if (user == null) {
+                                  throw 'No authenticated user.';
+                                }
+                                final querySnapshot = FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(user.uid)
+                                    .collection('transactions')
+                                    .where('merchant',
+                                        isEqualTo: transaction.merchant)
+                                    .where('date', isEqualTo: transaction.date)
+                                    .get()
+                                    .then((querySnapshot) {
+                                  for (var doc in querySnapshot.docs) {
+                                    doc.reference.delete();
+                                  }
+                                });
+                                setState(() {
+                                  _transactions.remove(transaction);
+                                  _filteredTransactions.remove(transaction);
+                                });
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text('Failed to delete: $e')),
+                                );
                               }
-                            });
-                            setState(() {
-                              _transactions.remove(transaction);
-                              _filteredTransactions.remove(transaction);
-                            });
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Failed to delete: $e')),
-                            );
-                          }
-                        },
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  TransactionDetails(transaction: transaction),
-                            ),
+                            },
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TransactionDetails(
+                                      transaction: transaction),
+                                ),
+                              );
+                            },
                           );
                         },
-                      );
-                    },
-                  ),
-                ),
+                      ),
+                    ),
             ),
           ],
         ),
@@ -369,4 +398,3 @@ class _TransactionsPageState extends State<TransactionsPage> {
     );
   }
 }
-

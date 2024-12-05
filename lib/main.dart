@@ -11,12 +11,15 @@ import 'pages/login/views/forgot_password.dart';
 import 'navigation_bar.dart';
 //import 'pages/login/signup_page.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
+import 'package:firebase_app_installations/firebase_app_installations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  print(await FirebaseInstallations.instance.getId());
   runApp(MyApp());
 }
 
@@ -52,14 +55,19 @@ class MyApp extends StatelessWidget {
           return MaterialApp.router(
             title: 'OmniWallet',
             theme: ThemeData(
-              brightness: settingsState.isDarkMode ? Brightness.dark : Brightness.light,
+              brightness:
+                  settingsState.isDarkMode ? Brightness.dark : Brightness.light,
               textTheme: TextTheme(
-                bodyLarge: TextStyle(fontSize: settingsState.isBigFont ? 18.0 : 14.0),
-                bodyMedium: TextStyle(fontSize: settingsState.isBigFont ? 16.0: 12.0),
+                bodyLarge:
+                    TextStyle(fontSize: settingsState.isBigFont ? 18.0 : 14.0),
+                bodyMedium:
+                    TextStyle(fontSize: settingsState.isBigFont ? 16.0 : 12.0),
               ),
               colorScheme: ColorScheme.fromSeed(
                 seedColor: Colors.blue,
-                brightness: settingsState.isDarkMode ? Brightness.dark : Brightness.light,
+                brightness: settingsState.isDarkMode
+                    ? Brightness.dark
+                    : Brightness.light,
               ),
             ),
             routerConfig: routerDemo(authenticationBloc),

@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
 class LandingView extends StatefulWidget {
@@ -27,6 +30,7 @@ class _LandingPageState extends State<LandingView> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   String? email;
+  String? name;
   String? password;
   String? errorMessage;
   CrossFadeState crossFadeState = CrossFadeState.showFirst;
@@ -36,6 +40,52 @@ class _LandingPageState extends State<LandingView> {
     emailController.text = "";
     passwordController.text = "";
     super.initState();
+  }
+
+  Future<String?> googleSignInCallback() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) {
+        return 'Sign in aborted';
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      final User? user = userCredential.user;
+
+      if (user != null) {
+        // Check if the user already exists in Firestore
+        final firestore = FirebaseFirestore.instance;
+        final userDocRef = firestore.collection('users').doc(user.uid);
+
+        // Check if the user document exists
+        final docSnapshot = await userDocRef.get();
+
+        if (!docSnapshot.exists) {
+          // If the user does not exist in Firestore, create the user document
+          await userDocRef.set({
+            'name': user.email ?? 'No name provided',
+            'email': user.email ?? 'No email provided',
+          });
+        }
+        setState(() {
+          name = user.email;
+          email = user.email;
+        });
+        return null;
+      } else {
+        return 'User not found';
+      }
+    } catch (e) {
+      return e.toString();
+    }
   }
 
   @override
@@ -62,6 +112,7 @@ class _LandingPageState extends State<LandingView> {
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            //crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset(
                 'assets/app_icon.png',
@@ -130,13 +181,11 @@ class _LandingPageState extends State<LandingView> {
                                   Colors.white), // White underline when focused
                         ),
                       ),
-                      //obscureText: true,
                       onSaved: (newValue) {
                         email = emailController.text;
                       },
                       validator: (value) => null,
                     ),
-                    //SizedBox(height: 30), // Space between fields
                     // Second TextField for password with visibility toggle
                     _buildPasswordField(
                       controller: passwordController,
