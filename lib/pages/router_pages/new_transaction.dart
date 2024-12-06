@@ -5,8 +5,7 @@ import '../../model/transaction.dart' as model;
 class NewTransaction extends StatefulWidget {
   final Function(model.Transaction) onAddTransaction;
 
-  const NewTransaction({Key? key, required this.onAddTransaction})
-      : super(key: key);
+  const NewTransaction({super.key, required this.onAddTransaction});
 
   @override
   _NewTransactionPageState createState() => _NewTransactionPageState();
@@ -99,11 +98,10 @@ class _NewTransactionPageState extends State<NewTransaction> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'New Transaction',
-          style: TextStyle(
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             color: Color(0xFF0093FF),
-            fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -129,7 +127,7 @@ class _NewTransactionPageState extends State<NewTransaction> {
                     _selectedDate == null
                         ? 'Select Date'
                         : '${_selectedDate!.month.toString().padLeft(2, '0')}/${_selectedDate!.day.toString().padLeft(2, '0')}/${_selectedDate!.year}',
-                    style: const TextStyle(color: Colors.white),
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),
                   ),
                 ),
                 const SizedBox(height: 16.0),
@@ -138,10 +136,8 @@ class _NewTransactionPageState extends State<NewTransaction> {
                   controller: _merchantController,
                   decoration: InputDecoration(
                     hintText: 'Merchant',
-                    hintStyle: TextStyle(
-                      color: const Color.fromARGB(255, 189, 189, 189),
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
+                    hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Color.fromARGB(255, 189, 189, 189),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(color: Color(0xFF0093FF)),
@@ -179,10 +175,8 @@ class _NewTransactionPageState extends State<NewTransaction> {
                   },
                   decoration: InputDecoration(
                     labelText: 'Category',
-                    hintStyle: TextStyle(
-                      color: const Color.fromARGB(255, 189, 189, 189),
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
+                    hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Color.fromARGB(255, 189, 189, 189),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(color: Color(0xFF0093FF)),
@@ -207,10 +201,8 @@ class _NewTransactionPageState extends State<NewTransaction> {
                   controller: _amountController,
                   decoration: InputDecoration(
                     hintText: 'Amount',
-                      hintStyle: TextStyle(
-                      color: const Color.fromARGB(255, 189, 189, 189),
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
+                      hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Color.fromARGB(255, 189, 189, 189),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(color: Color(0xFF0093FF)),
@@ -238,10 +230,8 @@ class _NewTransactionPageState extends State<NewTransaction> {
                   controller: _descriptionController,
                   decoration: InputDecoration(
                     hintText: 'Description',
-                    hintStyle: TextStyle(
-                      color: const Color.fromARGB(255, 189, 189, 189), 
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
+                    hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Color.fromARGB(255, 189, 189, 189),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(color: Color(0xFF0093FF)),
@@ -279,7 +269,7 @@ class _NewTransactionPageState extends State<NewTransaction> {
                       ),
                       child: Text(
                         'Add',
-                        style: TextStyle(color: Colors.white),
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),
                         ),
                     ),
                   ],

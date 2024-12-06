@@ -34,7 +34,7 @@ class TransactionCard extends StatelessWidget {
           margin: const EdgeInsets.symmetric(vertical: 8.0),
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
           decoration: BoxDecoration(
-            border: Border.all(color: Color(0xFF0093FF), width: 1.0),
+            border: Border.all(color: const Color(0xFF0093FF), width: 1.0),
             borderRadius: BorderRadius.circular(5.0),
           ),
           child: Row(
@@ -45,16 +45,14 @@ class TransactionCard extends StatelessWidget {
                 children: [
                   Text(
                     transaction.merchant,
-                    style: TextStyle(
-                      fontSize: 16.0,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Color(0xFF0093FF),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     transaction.date,
-                    style: const TextStyle(
-                      fontSize: 14.0,
+                    style:  Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Colors.grey,
                     ),
                   ),
@@ -63,10 +61,8 @@ class TransactionCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    (isSpending ? '- ' : '+ ') +
-                        '\$${transaction.amount.abs().toStringAsFixed(2)}',
-                    style: TextStyle(
-                      fontSize: 16.0,
+                    '${isSpending ? '- ' : '+ '}\$${transaction.amount.abs().toStringAsFixed(2)}',
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: isSpending ? Colors.red : Colors.green,
                     ),

@@ -145,7 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
   DocumentReference? docRef;
 
   final List<Widget> UIPages = [
-    LandingPage(
+    const LandingPage(
         /*
       emailSignInCallback: ({required String email, required String password}) {
         // Example logic for handling email sign-in
@@ -155,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
     //const ForgotPassword(),
     //const SignupView(),
     const HomePage(),
-    TransactionsPage(
+    const TransactionsPage(
           // transactions: model.Transaction.mockTransactions(), // Pass the required transactions
     ),
     const TrackingPage(),
