@@ -78,49 +78,50 @@ class _NewTransactionPageState extends State<NewTransaction> {
 
   bool _isAddingTransaction = false;
   void _addTransaction() {
-    if (_formKey.currentState!.validate() && _selectedDate != null) {
-      if (_isAddingTransaction) return;
-      setState(() {
-        _isAddingTransaction = true;
-      });
-      final newTransaction = model.Transaction(
-        merchant: _merchantController.text,
-        date:
-            '${_selectedDate!.month.toString().padLeft(2, '0')}/${_selectedDate!.day.toString().padLeft(2, '0')}/${_selectedDate!.year}',
-        category: _selectedCategory!,
-        amount: double.parse(_amountController.text),
-        description: _descriptionController.text,
-      );
-
-      widget.onAddTransaction(newTransaction);
-
-      _addTransactionToFirebase(newTransaction).then((_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('New transaction added'),
-            duration: Duration(seconds: 5),
-          ),
-        );
-        Navigator.pop(context);
-      }).catchError((error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to add transaction to Firebase: $error'),
-          ),
-        );
-      }).whenComplete(() {
-        setState(() {
-          _isAddingTransaction = false;
-        });
-      });
-    } else if (_selectedDate == null) {
+    if (!_formKey.currentState!.validate()) return;
+    if (_selectedDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please select a date'),
           duration: Duration(seconds: 2),
         ),
       );
+      return;
     }
+    if (_isAddingTransaction) return;
+    setState(() {
+      _isAddingTransaction = true;
+    });
+    final newTransaction = model.Transaction(
+      merchant: _merchantController.text,
+      date:
+          '${_selectedDate!.month.toString().padLeft(2, '0')}/${_selectedDate!.day.toString().padLeft(2, '0')}/${_selectedDate!.year}',
+      category: _selectedCategory!,
+      amount: double.parse(_amountController.text),
+      description: _descriptionController.text,
+    );
+
+    widget.onAddTransaction(newTransaction);
+
+    _addTransactionToFirebase(newTransaction).then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('New transaction added'),
+          duration: Duration(seconds: 5),
+        ),
+      );
+      Navigator.pop(context);
+    }).catchError((error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to add transaction to Firebase: $error'),
+        ),
+      );
+    }).whenComplete(() {
+      setState(() {
+        _isAddingTransaction = false;
+      });
+    });
   }
 
   @override
