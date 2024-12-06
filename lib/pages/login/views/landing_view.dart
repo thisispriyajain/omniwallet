@@ -106,13 +106,14 @@ class _LandingPageState extends State<LandingView> {
         titleSpacing: 0,
       ),
       backgroundColor: Colors.white,
-      body: Form(
-        key: _formKey,
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            //crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+
+      body: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
               Image.asset(
                 'assets/icons/app_icon.png',
                 width: 150,
@@ -294,6 +295,7 @@ class _LandingPageState extends State<LandingView> {
             ],
           ),
         ),
+      ),
       ),
     );
   }
