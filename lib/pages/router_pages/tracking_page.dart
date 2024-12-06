@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class TrackingPage extends StatefulWidget {
@@ -14,6 +15,7 @@ class _TrackingPageState extends State<TrackingPage> {
   Map<String, double> transactionData = {};
   bool isLoading = true;
   int touchedIndex = -1;
+  DateTimeRange? selectedDateRange;
 
   @override
   void initState() {
@@ -22,30 +24,47 @@ class _TrackingPageState extends State<TrackingPage> {
   }
 
   Future<void> _fetchTransactionData() async {
+    setState(() {
+      isLoading = true;
+    });
+
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) {
-        print("no user exists");
+        print("No authenticated user exists");
         return;
       }
-      final snapshot = await FirebaseFirestore.instance
+
+      Query query = FirebaseFirestore.instance
           .collection('users')
           .doc(user.uid)
-          .collection('transactions')
-          .get();
+          .collection('transactions');
+
+      if (selectedDateRange != null) {
+        final dateFormat = DateFormat('MM/dd/yyyy');
+        final startDate = dateFormat.format(selectedDateRange!.start);
+        final endDate = dateFormat.format(selectedDateRange!.end);
+
+        query = query
+            .where('date', isGreaterThanOrEqualTo: startDate)
+            .where('date', isLessThanOrEqualTo: endDate);
+      }
+
+      final snapshot = await query.get();
+
       Map<String, double> data = {};
       for (var doc in snapshot.docs) {
         final category = doc['category'] as String;
         final amount = (doc['amount'] as num).toDouble();
 
-        if (data.containsKey(category)) {
-          data[category] = data[category]! + amount; // Add to existing category
-        } else {
-          data[category] = amount; // Initialize new category with the amount
+        if (amount < 0) {
+          if (data.containsKey(category)) {
+            data[category] = data[category]! + amount; // Accumulate raw negative amounts
+          } else {
+            data[category] = amount;
+          }
         }
       }
-
-      // Convert all accumulated amounts to positive for display purposes
       data = data.map((key, value) => MapEntry(key, value.abs()));
 
       setState(() {
@@ -57,6 +76,26 @@ class _TrackingPageState extends State<TrackingPage> {
       setState(() {
         isLoading = false;
       });
+    }
+  }
+
+  Future<void> _selectDateRange() async {
+    final pickedRange = await showDateRangePicker(
+      context: context,
+      initialDateRange: selectedDateRange ??
+          DateTimeRange(
+            start: DateTime.now().subtract(const Duration(days: 7)),
+            end: DateTime.now(),
+          ),
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+    );
+
+    if (pickedRange != null) {
+      setState(() {
+        selectedDateRange = pickedRange;
+      });
+      _fetchTransactionData();
     }
   }
 
@@ -117,6 +156,16 @@ class _TrackingPageState extends State<TrackingPage> {
                             ?.copyWith(
                                 color: Colors.blue,
                                 fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: _selectDateRange,
+                        child: Text(
+                          selectedDateRange == null
+                              ? 'Select Date Range'
+                              : 'Selected: ${DateFormat('MM/dd/yyyy').format(selectedDateRange!.start)} - ${DateFormat('MM/dd/yyyy').format(selectedDateRange!.end)}',
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                       const SizedBox(height: 20),
                       Expanded(
