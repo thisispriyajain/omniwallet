@@ -151,10 +151,11 @@ class _TransactionsPageState extends State<TransactionsPage> {
                             MaterialPageRoute(
                               builder: (context) => NewTransaction(
                                 onAddTransaction: (newTransaction) {
-                                  setState(() {
-                                    _transactions.add(newTransaction);
-                                    _filteredTransactions.add(newTransaction);
-                                  });
+                                  // setState(() {
+                                  //   //_transactions.add(newTransaction);
+                                  //   //_filteredTransactions.add(newTransaction);
+                                  // });
+                                  _fetchTransactions();
                                 },
                                 userID: user.uid,
                               ),

@@ -101,8 +101,6 @@ class _NewTransactionPageState extends State<NewTransaction> {
       description: _descriptionController.text,
     );
 
-    widget.onAddTransaction(newTransaction);
-
     _addTransactionToFirebase(newTransaction).then((_) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -110,6 +108,7 @@ class _NewTransactionPageState extends State<NewTransaction> {
           duration: Duration(seconds: 5),
         ),
       );
+      widget.onAddTransaction(newTransaction);
       Navigator.pop(context);
     }).catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(
