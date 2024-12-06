@@ -203,12 +203,11 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           ListTile(
             title: Text('Name', style: Theme.of(context).textTheme.bodyLarge),
-            subtitle: Text(
-                FirebaseAuth.instance.currentUser?.displayName ?? 'No name set',
-                style: Theme.of(context).textTheme.bodyMedium),
+            subtitle:
+                Text(userName, style: Theme.of(context).textTheme.bodyMedium),
             leading: const Icon(Icons.person, color: Colors.blue),
             onTap: () {
-              _showNameEditDialog(context);
+              _showNameEditDialog(context, _updateUserName);
             },
           ),
           ListTile(
