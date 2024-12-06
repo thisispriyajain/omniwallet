@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
 class LandingView extends StatefulWidget {
@@ -27,6 +30,7 @@ class _LandingPageState extends State<LandingView> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   String? email;
+  String? name;
   String? password;
   String? errorMessage;
   CrossFadeState crossFadeState = CrossFadeState.showFirst;
@@ -38,6 +42,52 @@ class _LandingPageState extends State<LandingView> {
     super.initState();
   }
 
+  Future<String?> googleSignInCallback() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) {
+        return 'Sign in aborted';
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      print(
+          'Google User: ${googleUser.displayName}, Email: ${googleUser.email}');
+
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      final User? user = userCredential.user;
+
+      if (user != null) {
+        print('Name: ${user.displayName}, Email: ${user.email}');
+        //check if the user already exists in Firestore
+        final firestore = FirebaseFirestore.instance;
+        final userDocRef = firestore.collection('users').doc(user.uid);
+
+        //check if the user document exists
+        await userDocRef.set({
+          'name': user.email ?? 'No name provided',
+          'email': user.email ?? 'No email provided',
+        }, SetOptions(merge: true));
+        setState(() {
+          name = user.email;
+          email = user.email;
+        });
+        print(
+            'Firebase User: Name = ${user.displayName!}, Email = ${user.email!}');
+        return null;
+      } else {
+        return 'User not found';
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,9 +96,9 @@ class _LandingPageState extends State<LandingView> {
         title: Text(
           'OmniWallet',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            color: Color(0xFF0093FF),
-            fontWeight: FontWeight.bold,
-          ),
+                color: Color(0xFF0093FF),
+                fontWeight: FontWeight.bold,
+              ),
         ),
         centerTitle: true,
         elevation: 0,
@@ -61,18 +111,19 @@ class _LandingPageState extends State<LandingView> {
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            //crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/app_icon.png',
+                'assets/icons/app_icon.png',
                 width: 150,
                 height: 150,
               ),
               Text(
                 'Welcome',
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  fontWeight: FontWeight.normal,
-                  color: Color(0xFF0093FF),
-                ),
+                      fontWeight: FontWeight.normal,
+                      color: Color(0xFF0093FF),
+                    ),
               ),
               AnimatedCrossFade(
                   firstChild: Container(),
@@ -128,13 +179,11 @@ class _LandingPageState extends State<LandingView> {
                                   Colors.white), // White underline when focused
                         ),
                       ),
-                      //obscureText: true,
                       onSaved: (newValue) {
                         email = emailController.text;
                       },
                       validator: (value) => null,
                     ),
-                    //SizedBox(height: 30), // Space between fields
                     // Second TextField for password with visibility toggle
                     _buildPasswordField(
                       controller: passwordController,
@@ -215,6 +264,7 @@ class _LandingPageState extends State<LandingView> {
                       child: SignInButton(
                         Buttons.google,
                         onPressed: () async {
+                          print('Google sign-in button pressed');
                           errorMessage = await widget.googleSignInCallback();
                           if (errorMessage != null) {
                             setState(() {});
@@ -225,19 +275,19 @@ class _LandingPageState extends State<LandingView> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                        width: double.maxFinite,
-                        child: SignInButton(
-                          Buttons.apple,
-                          onPressed: () async {
-                            errorMessage = await widget.appleSignInCallback();
-                            if (errorMessage != null) {
-                              setState(() {});
-                            }
-                          },
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100)),
-                        )),
+                    // SizedBox(
+                    //     width: double.maxFinite,
+                    //     child: SignInButton(
+                    //       Buttons.apple,
+                    //       onPressed: () async {
+                    //         errorMessage = await widget.appleSignInCallback();
+                    //         if (errorMessage != null) {
+                    //           setState(() {});
+                    //         }
+                    //       },
+                    //       shape: RoundedRectangleBorder(
+                    //           borderRadius: BorderRadius.circular(100)),
+                    //     )),
                   ],
                 ),
               ),

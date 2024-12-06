@@ -1,11 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../model/transaction.dart' as model;
 
 class NewTransaction extends StatefulWidget {
   final Function(model.Transaction) onAddTransaction;
+  final String userID;
 
-  const NewTransaction({super.key, required this.onAddTransaction});
+  const NewTransaction(
+      {Key? key, required this.onAddTransaction, required this.userID})
+      : super(key: key);
 
   @override
   _NewTransactionPageState createState() => _NewTransactionPageState();
@@ -44,8 +48,19 @@ class _NewTransactionPageState extends State<NewTransaction> {
 
   Future<void> _addTransactionToFirebase(model.Transaction transaction) async {
     try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('User is not exist')),
+        );
+        return;
+      }
       final firestore = FirebaseFirestore.instance;
-      await firestore.collection('transactions').add({
+      await firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('transactions')
+          .add({
         'merchant': transaction.merchant,
         'date': transaction.date,
         'category': transaction.category,
@@ -61,37 +76,51 @@ class _NewTransactionPageState extends State<NewTransaction> {
     }
   }
 
+  bool _isAddingTransaction = false;
   void _addTransaction() {
-    if (_formKey.currentState!.validate() && _selectedDate != null) {
-      final newTransaction = model.Transaction(
-        merchant: _merchantController.text,
-        date:
-            '${_selectedDate!.month.toString().padLeft(2, '0')}/${_selectedDate!.day.toString().padLeft(2, '0')}/${_selectedDate!.year}',
-        category: _selectedCategory!,
-        amount: double.parse(_amountController.text),
-        description: '',
-      );
-
-      widget.onAddTransaction(newTransaction);
-
-      _addTransactionToFirebase(newTransaction);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('New transaction added'),
-          duration: Duration(seconds: 5),
-        ),
-      );
-
-      Navigator.pop(context);
-    } else if (_selectedDate == null) {
+    if (!_formKey.currentState!.validate()) return;
+    if (_selectedDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please select a date'),
           duration: Duration(seconds: 2),
         ),
       );
+      return;
     }
+    if (_isAddingTransaction) return;
+    setState(() {
+      _isAddingTransaction = true;
+    });
+    final newTransaction = model.Transaction(
+      merchant: _merchantController.text,
+      date:
+          '${_selectedDate!.month.toString().padLeft(2, '0')}/${_selectedDate!.day.toString().padLeft(2, '0')}/${_selectedDate!.year}',
+      category: _selectedCategory!,
+      amount: double.parse(_amountController.text),
+      description: _descriptionController.text,
+    );
+
+    _addTransactionToFirebase(newTransaction).then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('New transaction added'),
+          duration: Duration(seconds: 5),
+        ),
+      );
+      widget.onAddTransaction(newTransaction);
+      Navigator.pop(context);
+    }).catchError((error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to add transaction to Firebase: $error'),
+        ),
+      );
+    }).whenComplete(() {
+      setState(() {
+        _isAddingTransaction = false;
+      });
+    });
   }
 
   @override
@@ -101,9 +130,9 @@ class _NewTransactionPageState extends State<NewTransaction> {
         title: Text(
           'New Transaction',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            color: Color(0xFF0093FF),
-            fontWeight: FontWeight.bold,
-          ),
+                color: Color(0xFF0093FF),
+                fontWeight: FontWeight.bold,
+              ),
         ),
         centerTitle: true,
         iconTheme: const IconThemeData(color: Color(0xFF0093FF)),
@@ -127,7 +156,10 @@ class _NewTransactionPageState extends State<NewTransaction> {
                     _selectedDate == null
                         ? 'Select Date'
                         : '${_selectedDate!.month.toString().padLeft(2, '0')}/${_selectedDate!.day.toString().padLeft(2, '0')}/${_selectedDate!.year}',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
+                        ?.copyWith(color: Colors.white),
                   ),
                 ),
                 const SizedBox(height: 16.0),
@@ -137,8 +169,8 @@ class _NewTransactionPageState extends State<NewTransaction> {
                   decoration: InputDecoration(
                     hintText: 'Merchant',
                     hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Color.fromARGB(255, 189, 189, 189),
-                    ),
+                          color: Color.fromARGB(255, 189, 189, 189),
+                        ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(color: Color(0xFF0093FF)),
                       borderRadius: BorderRadius.circular(8.0),
@@ -160,7 +192,7 @@ class _NewTransactionPageState extends State<NewTransaction> {
 
                 DropdownButtonFormField<String>(
                   value: _selectedCategory,
-                  items: ['Food', 'Bill', 'Income']
+                  items: ['Food', 'Bill', 'Income', 'Others']
                       .map(
                         (category) => DropdownMenuItem(
                           value: category,
@@ -176,8 +208,8 @@ class _NewTransactionPageState extends State<NewTransaction> {
                   decoration: InputDecoration(
                     labelText: 'Category',
                     hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Color.fromARGB(255, 189, 189, 189),
-                    ),
+                          color: Color.fromARGB(255, 189, 189, 189),
+                        ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(color: Color(0xFF0093FF)),
                       borderRadius: BorderRadius.circular(8.0),
@@ -201,9 +233,9 @@ class _NewTransactionPageState extends State<NewTransaction> {
                   controller: _amountController,
                   decoration: InputDecoration(
                     hintText: 'Amount',
-                      hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Color.fromARGB(255, 189, 189, 189),
-                    ),
+                    hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Color.fromARGB(255, 189, 189, 189),
+                        ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(color: Color(0xFF0093FF)),
                       borderRadius: BorderRadius.circular(8.0),
@@ -231,8 +263,8 @@ class _NewTransactionPageState extends State<NewTransaction> {
                   decoration: InputDecoration(
                     hintText: 'Description',
                     hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Color.fromARGB(255, 189, 189, 189),
-                    ),
+                          color: Color.fromARGB(255, 189, 189, 189),
+                        ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(color: Color(0xFF0093FF)),
                       borderRadius: BorderRadius.circular(8.0),
@@ -258,19 +290,23 @@ class _NewTransactionPageState extends State<NewTransaction> {
                     ElevatedButton(
                       onPressed: () => Navigator.pop(context),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 229, 229, 229),
+                        backgroundColor:
+                            const Color.fromARGB(255, 229, 229, 229),
                       ),
                       child: const Text('Cancel'),
                     ),
                     ElevatedButton(
-                      onPressed: _addTransaction,
+                      onPressed: _isAddingTransaction ? null : _addTransaction,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF0093FF),
                       ),
                       child: Text(
                         'Add',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),
-                        ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge
+                            ?.copyWith(color: Colors.white),
+                      ),
                     ),
                   ],
                 ),

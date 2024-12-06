@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignupView extends StatefulWidget {
   const SignupView(
@@ -41,6 +43,16 @@ class _SignupViewState extends State<SignupView> {
     super.initState();
   }
 
+  Future<void> _storeUserInFirestore(
+      User user, String name, String email) async {
+    final firestore = FirebaseFirestore.instance;
+    await firestore.collection('users').doc(user.uid).set({
+      'name': name,
+      'email': email,
+      'createdAt': FieldValue.serverTimestamp(),
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,9 +61,9 @@ class _SignupViewState extends State<SignupView> {
         title: Text(
           'OmniWallet',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            color: Color(0xFF0093FF),
-            fontWeight: FontWeight.bold,
-          ),
+                color: Color(0xFF0093FF),
+                fontWeight: FontWeight.bold,
+              ),
         ),
         centerTitle: true,
         elevation: 0,
@@ -72,8 +84,8 @@ class _SignupViewState extends State<SignupView> {
                 Text(
                   "Sign up",
                   style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                    color: Color(0xFF0093FF),
-                  ),
+                        color: Color(0xFF0093FF),
+                      ),
                   textAlign: TextAlign.center,
                 ),
                 //SizedBox(height: 65),
@@ -155,6 +167,10 @@ class _SignupViewState extends State<SignupView> {
                               crossFadeState = CrossFadeState.showSecond;
                             });
                           } else {
+                            final user = FirebaseAuth.instance.currentUser;
+                            if (user != null) {
+                              await _storeUserInFirestore(user, name!, email!);
+                            }
                             await showDialog(
                                 context: context,
                                 builder: (context) {

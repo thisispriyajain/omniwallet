@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,10 +13,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<BarChartGroupData> barGroups = [];
-  Map<String, Map<String, double>> groupedData = {};
+  Map<String, Map<String, double>> groupedData =
+      {}; // {date: {category: amount}}
   String latestTransactionDate = "";
   double totalMonthlySpending = 0.0;
   bool isLoading = true;
+  String userName = '';
 
   @override
   void initState() {
@@ -24,7 +28,22 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _fetchSpendingData() async {
     try {
-      final snapshot = await FirebaseFirestore.instance.collection('transactions').get();
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw Exception("no user exists");
+      }
+      final userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+      if (userSnapshot.exists) {
+        userName = userSnapshot['name'] ?? 'Guest';
+      }
+      final snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('transactions')
+          .get();
       Map<String, Map<String, double>> tempGroupedData = {};
       double tempTotalSpending = 0.0;
       String tempLatestTransactionDate = "";
@@ -34,16 +53,21 @@ class _HomePageState extends State<HomePage> {
         final category = doc['category'] as String;
         final amount = (doc['amount'] as num).toDouble();
 
-        if (amount < 0) {
+        if (amount != 0) {
           if (!tempGroupedData.containsKey(date)) {
             tempGroupedData[date] = {};
           }
-          tempGroupedData[date]![category] =
-              (tempGroupedData[date]![category] ?? 0) + amount.abs();
-
-          tempTotalSpending += amount.abs();
-
-          if (tempLatestTransactionDate.isEmpty || date.compareTo(tempLatestTransactionDate) > 0) {
+          if (amount < 0) {
+            tempGroupedData[date]![category] =
+                (tempGroupedData[date]![category] ?? 0) + amount.abs();
+            tempTotalSpending += amount.abs();
+          } else {
+            //for income(positive amounts), add them normally
+            tempGroupedData[date]![category] =
+                (tempGroupedData[date]![category] ?? 0) + amount;
+          }
+          if (tempLatestTransactionDate.isEmpty ||
+              date.compareTo(tempLatestTransactionDate) > 0) {
             tempLatestTransactionDate = date;
           }
         }
@@ -85,14 +109,13 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-
   Color _getCategoryColor(String category) {
     switch (category) {
       case 'Bill':
         return const Color(0xFF0DA5E9);
       case 'Food':
         return const Color(0xFF6CEAC0);
-      case 'Entertainment':
+      case 'Income':
         return const Color(0xFF3E3C8D);
       default:
         return Colors.grey;
@@ -106,9 +129,9 @@ class _HomePageState extends State<HomePage> {
         title: Text(
           'OmniWallet',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            color: Color(0xFF0093FF),
-            fontWeight: FontWeight.bold,
-          ),
+                color: Color(0xFF0093FF),
+                fontWeight: FontWeight.bold,
+              ),
         ),
         centerTitle: true,
       ),
@@ -133,28 +156,37 @@ class _HomePageState extends State<HomePage> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                "Hello, Priya",
-                                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                "Hello, $userName",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineSmall
+                                    ?.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                               ),
                               const SizedBox(height: 8),
                               Text(
                                 "You've spent \$${totalMonthlySpending.toStringAsFixed(2)}",
-                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w400,
+                                    ),
                               ),
                               const SizedBox(height: 8),
                               Text(
                                 latestTransactionDate.isNotEmpty
                                     ? latestTransactionDate
                                     : "No transactions",
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: Colors.white,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      color: Colors.white,
+                                    ),
                               ),
                             ],
                           ),
@@ -164,8 +196,7 @@ class _HomePageState extends State<HomePage> {
                       Text(
                         "Daily Spending",
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold),
+                            color: Colors.blue, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 16),
                       Expanded(
@@ -185,21 +216,23 @@ class _HomePageState extends State<HomePage> {
                                 showTitles: true,
                                 getTitles: (value) {
                                   if (value.toInt() < groupedData.length) {
-                                    final date = groupedData.keys.toList()[value.toInt()];
-                                    return date.substring(0, 5);
+                                    final date = groupedData.keys
+                                        .toList()[value.toInt()];
+                                    return date.substring(0, 5); // MM/DD
                                   }
                                   return '';
                                 },
                                 margin: 8,
                               ),
                               topTitles: SideTitles(
-                                showTitles: false,
-                                ),
+                                showTitles:
+                                    false, // Disable top titles to remove indices
+                              ),
                             ),
                             barGroups: barGroups,
                             maxY: groupedData.values
-                                .expand((e) => e.values)
-                                .reduce((a, b) => a > b ? a : b) +
+                                    .expand((e) => e.values)
+                                    .reduce((a, b) => a > b ? a : b) +
                                 10,
                           ),
                         ),

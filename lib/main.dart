@@ -5,12 +5,15 @@ import 'package:omniwallet/firebase_options.dart';
 import 'package:omniwallet/navigation/routerdemo.dart';
 //import 'pages/login/signup_page.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
+import 'package:firebase_app_installations/firebase_app_installations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  print(await FirebaseInstallations.instance.getId());
   runApp(MyApp());
 }
 
@@ -22,20 +25,20 @@ class SettingsState extends ChangeNotifier {
   bool get isBigFont => _isBigFont;
 
   ThemeData get currentTheme => ThemeData(
-    brightness: _isDarkMode ? Brightness.dark : Brightness.light,
-    textTheme: TextTheme(
-      bodyLarge: TextStyle(fontSize: _isBigFont ? 20.0: 16.0),
-      bodyMedium: TextStyle(fontSize: _isBigFont ? 18.0 : 14.0),
-      bodySmall: TextStyle(fontSize: _isBigFont ? 16.0: 12.0),
-      headlineLarge: TextStyle(fontSize: _isBigFont ? 26.0: 22.0),
-      headlineMedium: TextStyle(fontSize: _isBigFont ? 22.0: 18.0),
-      headlineSmall: TextStyle(fontSize: _isBigFont ? 20.0: 16.0),
-    ),
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: Colors.blue,
-      brightness: _isDarkMode ? Brightness.dark : Brightness.light,
-    ),
-  );
+        brightness: _isDarkMode ? Brightness.dark : Brightness.light,
+        textTheme: TextTheme(
+          bodyLarge: TextStyle(fontSize: _isBigFont ? 20.0 : 16.0),
+          bodyMedium: TextStyle(fontSize: _isBigFont ? 18.0 : 14.0),
+          bodySmall: TextStyle(fontSize: _isBigFont ? 16.0 : 12.0),
+          headlineLarge: TextStyle(fontSize: _isBigFont ? 26.0 : 22.0),
+          headlineMedium: TextStyle(fontSize: _isBigFont ? 22.0 : 18.0),
+          headlineSmall: TextStyle(fontSize: _isBigFont ? 20.0 : 16.0),
+        ),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: _isDarkMode ? Brightness.dark : Brightness.light,
+        ),
+      );
 
   void toggleDarkMode(bool value) {
     _isDarkMode = value;
