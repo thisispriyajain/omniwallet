@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart'; // Add this package for date formatting
 
 class TrackingPage extends StatefulWidget {
   const TrackingPage({super.key});
@@ -13,6 +14,7 @@ class _TrackingPageState extends State<TrackingPage> {
   Map<String, double> transactionData = {};
   bool isLoading = true;
   int touchedIndex = -1;
+  DateTimeRange? selectedDateRange;
 
   @override
   void initState() {
@@ -21,8 +23,24 @@ class _TrackingPageState extends State<TrackingPage> {
   }
 
   Future<void> _fetchTransactionData() async {
+    setState(() {
+      isLoading = true;
+    });
+
     try {
-      final snapshot = await FirebaseFirestore.instance.collection('transactions').get();
+      Query query = FirebaseFirestore.instance.collection('transactions');
+
+      if (selectedDateRange != null) {
+        // Convert DateTime to string in the MM/dd/yyyy format
+        final dateFormat = DateFormat('MM/dd/yyyy');
+        final startDate = dateFormat.format(selectedDateRange!.start);
+        final endDate = dateFormat.format(selectedDateRange!.end);
+
+        query = query.where('date', isGreaterThanOrEqualTo: startDate);
+        query = query.where('date', isLessThanOrEqualTo: endDate);
+      }
+
+      final snapshot = await query.get();
       Map<String, double> data = {};
       for (var doc in snapshot.docs) {
         final category = doc['category'] as String;
@@ -49,6 +67,26 @@ class _TrackingPageState extends State<TrackingPage> {
       setState(() {
         isLoading = false;
       });
+    }
+  }
+
+  Future<void> _selectDateRange() async {
+    final pickedRange = await showDateRangePicker(
+      context: context,
+      initialDateRange: selectedDateRange ??
+          DateTimeRange(
+            start: DateTime.now().subtract(const Duration(days: 7)),
+            end: DateTime.now(),
+          ),
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+    );
+
+    if (pickedRange != null) {
+      setState(() {
+        selectedDateRange = pickedRange;
+      });
+      _fetchTransactionData(); // Re-fetch data with the new date range
     }
   }
 
@@ -100,6 +138,16 @@ class _TrackingPageState extends State<TrackingPage> {
                       const Text(
                         'Transaction Overview',
                         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: _selectDateRange,
+                        child: Text(
+                          selectedDateRange == null
+                              ? 'Select Date Range'
+                              : 'Selected: ${DateFormat('MM/dd/yyyy').format(selectedDateRange!.start)} - ${DateFormat('MM/dd/yyyy').format(selectedDateRange!.end)}',
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                       const SizedBox(height: 20),
                       Expanded(
