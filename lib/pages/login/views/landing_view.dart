@@ -55,30 +55,30 @@ class _LandingPageState extends State<LandingView> {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
+      print(
+          'Google User: ${googleUser.displayName}, Email: ${googleUser.email}');
 
       final UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
       final User? user = userCredential.user;
 
       if (user != null) {
-        // Check if the user already exists in Firestore
+        print('Name: ${user.displayName}, Email: ${user.email}');
+        //check if the user already exists in Firestore
         final firestore = FirebaseFirestore.instance;
         final userDocRef = firestore.collection('users').doc(user.uid);
 
-        // Check if the user document exists
-        final docSnapshot = await userDocRef.get();
-
-        if (!docSnapshot.exists) {
-          // If the user does not exist in Firestore, create the user document
-          await userDocRef.set({
-            'name': user.email ?? 'No name provided',
-            'email': user.email ?? 'No email provided',
-          });
-        }
+        //check if the user document exists
+        await userDocRef.set({
+          'name': user.email ?? 'No name provided',
+          'email': user.email ?? 'No email provided',
+        }, SetOptions(merge: true));
         setState(() {
           name = user.email;
           email = user.email;
         });
+        print(
+            'Firebase User: Name = ${user.displayName!}, Email = ${user.email!}');
         return null;
       } else {
         return 'User not found';
@@ -266,6 +266,7 @@ class _LandingPageState extends State<LandingView> {
                       child: SignInButton(
                         Buttons.google,
                         onPressed: () async {
+                          print('Google sign-in button pressed');
                           errorMessage = await widget.googleSignInCallback();
                           if (errorMessage != null) {
                             setState(() {});
@@ -276,19 +277,19 @@ class _LandingPageState extends State<LandingView> {
                         ),
                       ),
                     ),
-                    Container(
-                        width: double.maxFinite,
-                        child: SignInButton(
-                          Buttons.apple,
-                          onPressed: () async {
-                            errorMessage = await widget.appleSignInCallback();
-                            if (errorMessage != null) {
-                              setState(() {});
-                            }
-                          },
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100)),
-                        )),
+                    // Container(
+                    //     width: double.maxFinite,
+                    //     child: SignInButton(
+                    //       Buttons.apple,
+                    //       onPressed: () async {
+                    //         errorMessage = await widget.appleSignInCallback();
+                    //         if (errorMessage != null) {
+                    //           setState(() {});
+                    //         }
+                    //       },
+                    //       shape: RoundedRectangleBorder(
+                    //           borderRadius: BorderRadius.circular(100)),
+                    //     )),
                   ],
                 ),
               ),
