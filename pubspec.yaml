@@ -48,12 +48,25 @@ dependencies:
   shared_preferences: ^2.3.3
   sign_in_button: ^3.2.0
   intl: ^0.18.0
+  firebase_in_app_messaging: ^0.8.0+11
+  firebase_app_installations: ^0.3.1+7
+  flutter_launcher_icons: ^0.14.1
   geolocator: ^13.0.2
   http: ^1.2.2
   #flutter_bloc: ^8.1.0
   #google_sign_in: ^6.2.2
   #shared_preferences: ^2.0.15
   #firebase_auth: ^5.3.3
+
+flutter_launcher_icons:
+  image_path: "assets/icons/app_icon.png"
+  android: true
+  ios: true
+  web:
+    generate: true
+    image_path: "web/icons/app_icon.png"
+    background_color: "#FFFFFF"
+    theme_color: "#FFFFFF"
 
 dev_dependencies:
   flutter_test:

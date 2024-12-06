@@ -6,8 +6,9 @@ import '../../services/location_service.dart';
 
 class NewTransaction extends StatefulWidget {
   final Function(model.Transaction) onAddTransaction;
+  final String userID;
 
-  const NewTransaction({Key? key, required this.onAddTransaction})
+  const NewTransaction({Key? key, required this.onAddTransaction, required this.userID})
       : super(key: key);
 
   @override
