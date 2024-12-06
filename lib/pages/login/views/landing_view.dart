@@ -275,19 +275,19 @@ class _LandingPageState extends State<LandingView> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                        width: double.maxFinite,
-                        child: SignInButton(
-                          Buttons.apple,
-                          onPressed: () async {
-                            errorMessage = await widget.appleSignInCallback();
-                            if (errorMessage != null) {
-                              setState(() {});
-                            }
-                          },
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100)),
-                        )),
+                    // SizedBox(
+                    //     width: double.maxFinite,
+                    //     child: SignInButton(
+                    //       Buttons.apple,
+                    //       onPressed: () async {
+                    //         errorMessage = await widget.appleSignInCallback();
+                    //         if (errorMessage != null) {
+                    //           setState(() {});
+                    //         }
+                    //       },
+                    //       shape: RoundedRectangleBorder(
+                    //           borderRadius: BorderRadius.circular(100)),
+                    //     )),
                   ],
                 ),
               ),
