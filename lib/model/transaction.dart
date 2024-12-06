@@ -4,6 +4,7 @@ class Transaction {
   final String category;
   final double amount;
   final String description;
+  final String location;
 
   Transaction({
     required this.merchant,
@@ -11,6 +12,8 @@ class Transaction {
     required this.category,
     required this.amount,
     required this.description,
+    required this.location,
+
   });
 
   static List<Transaction> mockTransactions() {
@@ -21,6 +24,7 @@ class Transaction {
         category: 'Bill',
         amount: -50.0,
         description: 'Monthly subscription',
+        location: '1st street',
       ),
       Transaction(
         merchant: 'Starbucks',
@@ -28,6 +32,7 @@ class Transaction {
         category: 'Food',
         amount: -12.0,
         description: 'Coffee and snacks',
+        location: '2nd street',
       ),
       Transaction(
         merchant: 'Freelance',
@@ -35,6 +40,7 @@ class Transaction {
         category: 'Income',
         amount: 500.0,
         description: 'Payment for project',
+        location: '3rd street',
       ),
     ];
   }

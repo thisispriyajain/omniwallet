@@ -40,6 +40,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
           category: data['category'] ?? '',
           amount: (data['amount'] ?? 0).toDouble(),
           description: data['description'] ?? '',
+          location: data['location'] ?? '',
         );
       }).toList();
 
