@@ -93,13 +93,12 @@ class _LandingPageState extends State<LandingView> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           'OmniWallet',
-          style: TextStyle(
-            color: Color(0xFF0093FF),
-            fontSize: 45, // Increase text size
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                color: Color(0xFF0093FF),
+                fontWeight: FontWeight.bold,
+              ),
         ),
         centerTitle: true,
         elevation: 0,
@@ -119,19 +118,18 @@ class _LandingPageState extends State<LandingView> {
                 width: 150,
                 height: 150,
               ),
-              const Text(
+              Text(
                 'Welcome',
-                style: TextStyle(
-                  fontSize: 45,
-                  fontWeight: FontWeight.normal,
-                  color: Color(0xFF0093FF),
-                ),
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                      fontWeight: FontWeight.normal,
+                      color: Color(0xFF0093FF),
+                    ),
               ),
               AnimatedCrossFade(
                   firstChild: Container(),
                   secondChild: Container(
                     width: double.infinity,
-                    margin: EdgeInsets.only(left: 20, right: 20),
+                    margin: const EdgeInsets.only(left: 20, right: 20),
                     padding: const EdgeInsets.all(20.0),
                     decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.errorContainer,
@@ -143,13 +141,13 @@ class _LandingPageState extends State<LandingView> {
                                 .onErrorContainer)),
                   ),
                   crossFadeState: crossFadeState,
-                  duration: Duration(milliseconds: 300)),
+                  duration: const Duration(milliseconds: 300)),
               Container(
                 // Blue rectangle
-                margin: EdgeInsets.all(20),
+                margin: const EdgeInsets.all(20),
                 //padding: const EdgeInsets.all(20.0),
                 decoration: BoxDecoration(
-                  color: Color(0xFF0093FF),
+                  color: const Color(0xFF0093FF),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 width: double.infinity,
@@ -160,7 +158,7 @@ class _LandingPageState extends State<LandingView> {
                     // First TextField with user icon and "User ID"
                     TextFormField(
                       controller: emailController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: "Email",
                         labelStyle: TextStyle(
                           color: Colors.white,
@@ -201,7 +199,7 @@ class _LandingPageState extends State<LandingView> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),
                 width: double.maxFinite,
                 //padding: EdgeInsets.only(top: 20, bottom: 0),
                 child: FilledButton(
@@ -220,12 +218,12 @@ class _LandingPageState extends State<LandingView> {
                       }
                     },
                     style: FilledButton.styleFrom(
-                      backgroundColor: Color(0xFF0093FF),
+                      backgroundColor: const Color(0xFF0093FF),
                       foregroundColor: Colors.white,
                     ),
-                    child: Text("Log in")),
+                    child: const Text("Log in")),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               // Row for "Forgot Password" and "Sign Up" texts
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -237,31 +235,31 @@ class _LandingPageState extends State<LandingView> {
                     //   onPressed: widget.resetPassworReqestCallback,
                     // ),
                     TextButton(
+                      onPressed: widget.resetPasswordRequestCallback,
                       child: Text("Forgot Password",
                           style: TextStyle(
                             color: Color(0xFF0093FF),
                             fontSize: 20,
                           )),
-                      onPressed: widget.resetPasswordRequestCallback,
                     ),
                     TextButton(
+                      onPressed: widget.signUpRequestCallback,
                       child: Text("Sign up",
                           style: TextStyle(
                             color: Color(0xFF0093FF),
                             fontSize: 20,
                           )),
-                      onPressed: widget.signUpRequestCallback,
                     )
                   ],
                 ),
               ),
               Container(
-                margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                 width: double.infinity,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
+                    SizedBox(
                       width: double.maxFinite,
                       child: SignInButton(
                         Buttons.google,
@@ -277,19 +275,19 @@ class _LandingPageState extends State<LandingView> {
                         ),
                       ),
                     ),
-                    // Container(
-                    //     width: double.maxFinite,
-                    //     child: SignInButton(
-                    //       Buttons.apple,
-                    //       onPressed: () async {
-                    //         errorMessage = await widget.appleSignInCallback();
-                    //         if (errorMessage != null) {
-                    //           setState(() {});
-                    //         }
-                    //       },
-                    //       shape: RoundedRectangleBorder(
-                    //           borderRadius: BorderRadius.circular(100)),
-                    //     )),
+                    SizedBox(
+                        width: double.maxFinite,
+                        child: SignInButton(
+                          Buttons.apple,
+                          onPressed: () async {
+                            errorMessage = await widget.appleSignInCallback();
+                            if (errorMessage != null) {
+                              setState(() {});
+                            }
+                          },
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100)),
+                        )),
                   ],
                 ),
               ),
@@ -319,10 +317,10 @@ class _LandingPageState extends State<LandingView> {
       obscureText: !isVisible,
       decoration: InputDecoration(
         labelText: labelText,
-        labelStyle: TextStyle(
+        labelStyle: const TextStyle(
           color: Colors.white,
         ),
-        prefixIcon: Icon(
+        prefixIcon: const Icon(
           Icons.lock,
           color: Colors.white,
         ),
@@ -334,11 +332,11 @@ class _LandingPageState extends State<LandingView> {
           onPressed: onToggle,
         ),
         floatingLabelBehavior: FloatingLabelBehavior.never,
-        enabledBorder: UnderlineInputBorder(
+        enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
               color: Colors.white), // White underline when not focused
         ),
-        focusedBorder: UnderlineInputBorder(
+        focusedBorder: const UnderlineInputBorder(
           borderSide:
               BorderSide(color: Colors.white), // White underline when focused
         ),

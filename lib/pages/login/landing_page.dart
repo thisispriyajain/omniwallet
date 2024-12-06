@@ -1,4 +1,3 @@
-import 'package:omniwallet/blocs/authentication/bloc/authentication_bloc.dart';
 import 'package:omniwallet/navigation/routerdemo.dart';
 import 'package:omniwallet/pages/login/cubit/login_cubit.dart';
 import 'package:omniwallet/pages/login/views/forgot_password.dart';
@@ -8,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../blocs/authentication/bloc/authentication_bloc.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});

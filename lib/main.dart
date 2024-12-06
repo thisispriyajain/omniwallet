@@ -2,13 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:omniwallet/blocs/authentication/bloc/authentication_bloc.dart';
 import 'package:omniwallet/firebase_options.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:omniwallet/navigation/routerdemo.dart';
-import 'package:omniwallet/pages/router_pages/home_page.dart';
-import 'my_home_page.dart';
-import 'pages/login/landing_page.dart';
-import 'pages/login/views/forgot_password.dart';
-import 'navigation_bar.dart';
 //import 'pages/login/signup_page.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
@@ -30,6 +24,22 @@ class SettingsState extends ChangeNotifier {
   bool get isDarkMode => _isDarkMode;
   bool get isBigFont => _isBigFont;
 
+  ThemeData get currentTheme => ThemeData(
+        brightness: _isDarkMode ? Brightness.dark : Brightness.light,
+        textTheme: TextTheme(
+          bodyLarge: TextStyle(fontSize: _isBigFont ? 20.0 : 16.0),
+          bodyMedium: TextStyle(fontSize: _isBigFont ? 18.0 : 14.0),
+          bodySmall: TextStyle(fontSize: _isBigFont ? 16.0 : 12.0),
+          headlineLarge: TextStyle(fontSize: _isBigFont ? 26.0 : 22.0),
+          headlineMedium: TextStyle(fontSize: _isBigFont ? 22.0 : 18.0),
+          headlineSmall: TextStyle(fontSize: _isBigFont ? 20.0 : 16.0),
+        ),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: _isDarkMode ? Brightness.dark : Brightness.light,
+        ),
+      );
+
   void toggleDarkMode(bool value) {
     _isDarkMode = value;
     notifyListeners();
@@ -49,27 +59,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => SettingsState(),
+      create: (_) => SettingsState(),
       child: Consumer<SettingsState>(
         builder: (context, settingsState, child) {
           return MaterialApp.router(
             title: 'OmniWallet',
-            theme: ThemeData(
-              brightness:
-                  settingsState.isDarkMode ? Brightness.dark : Brightness.light,
-              textTheme: TextTheme(
-                bodyLarge:
-                    TextStyle(fontSize: settingsState.isBigFont ? 18.0 : 14.0),
-                bodyMedium:
-                    TextStyle(fontSize: settingsState.isBigFont ? 16.0 : 12.0),
-              ),
-              colorScheme: ColorScheme.fromSeed(
-                seedColor: Colors.blue,
-                brightness: settingsState.isDarkMode
-                    ? Brightness.dark
-                    : Brightness.light,
-              ),
-            ),
+            theme: settingsState.currentTheme,
             routerConfig: routerDemo(authenticationBloc),
           );
         },

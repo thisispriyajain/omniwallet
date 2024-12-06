@@ -58,13 +58,12 @@ class _SignupViewState extends State<SignupView> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           'OmniWallet',
-          style: TextStyle(
-            color: Color(0xFF0093FF),
-            fontSize: 45,
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                color: Color(0xFF0093FF),
+                fontWeight: FontWeight.bold,
+              ),
         ),
         centerTitle: true,
         elevation: 0,
@@ -82,12 +81,11 @@ class _SignupViewState extends State<SignupView> {
             child: Column(
               children: [
                 const SizedBox(height: 45),
-                const Text(
+                Text(
                   "Sign up",
-                  style: TextStyle(
-                    fontSize: 50,
-                    color: Color(0xFF0093FF),
-                  ),
+                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                        color: Color(0xFF0093FF),
+                      ),
                   textAlign: TextAlign.center,
                 ),
                 //SizedBox(height: 65),

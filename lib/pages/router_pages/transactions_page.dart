@@ -12,7 +12,7 @@ import 'new_transaction.dart';
 import 'transaction_details.dart';
 
 class TransactionsPage extends StatefulWidget {
-  const TransactionsPage({Key? key}) : super(key: key);
+  const TransactionsPage({super.key});
 
   @override
   _TransactionsPageState createState() => _TransactionsPageState();
@@ -111,13 +111,12 @@ class _TransactionsPageState extends State<TransactionsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'OmniWallet',
-          style: TextStyle(
-            color: Color(0xFF0093FF),
-            fontSize: 45,
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                color: Color(0xFF0093FF),
+                fontWeight: FontWeight.bold,
+              ),
         ),
         centerTitle: true,
         actions: [
@@ -136,7 +135,10 @@ class _TransactionsPageState extends State<TransactionsPage> {
                       ListTile(
                         title: Text(
                           'Add a Transaction',
-                          style: TextStyle(color: Color(0xFF0093FF)),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(color: Color(0xFF0093FF)),
                         ),
                         onTap: () {
                           final user = FirebaseAuth.instance.currentUser;
@@ -164,7 +166,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                         },
                       ),
                       Divider(
-                        color: Color(0xFF0093FF).withOpacity(0.2),
+                        color: const Color(0xFF0093FF).withOpacity(0.2),
                         thickness: 1,
                         indent: 20,
                         endIndent: 20,
@@ -174,7 +176,10 @@ class _TransactionsPageState extends State<TransactionsPage> {
                             color: Color(0xFF0093FF)),
                         title: Text(
                           'Scan',
-                          style: TextStyle(color: Color(0xFF0093FF)),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(color: Color(0xFF0093FF)),
                         ),
                         onTap: () {
                           Navigator.pop(context);
@@ -197,7 +202,10 @@ class _TransactionsPageState extends State<TransactionsPage> {
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.search, color: Color(0xFF0093FF)),
                 hintText: 'Search merchants',
-                hintStyle: const TextStyle(color: Color(0xFF0093FF)),
+                hintStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(color: Color(0xFF0093FF)),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
                   borderSide: const BorderSide(color: Color(0xFF0093FF)),
@@ -208,7 +216,10 @@ class _TransactionsPageState extends State<TransactionsPage> {
                       const BorderSide(color: Color(0xFF0093FF), width: 2.0),
                 ),
               ),
-              style: const TextStyle(color: Color(0xFF0093FF)),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(color: Color(0xFF0093FF)),
               onChanged: _filterTransactions,
             ),
             const SizedBox(height: 16.0),
@@ -219,9 +230,12 @@ class _TransactionsPageState extends State<TransactionsPage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF0093FF),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Show All',
-                    style: TextStyle(color: Colors.white),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
+                        ?.copyWith(color: Colors.white),
                   ),
                 ),
                 const SizedBox(width: 4.0),
@@ -234,7 +248,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                       lastDate: DateTime(2100),
                       builder: (context, child) {
                         return Theme(
-                          data: ThemeData.light().copyWith(
+                          data: Theme.of(context).copyWith(
                             colorScheme: const ColorScheme.light(
                               primary: Color(0xFF0093FF),
                             ),
@@ -250,9 +264,12 @@ class _TransactionsPageState extends State<TransactionsPage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF0093FF),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Select Date',
-                    style: TextStyle(color: Colors.white),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
+                        ?.copyWith(color: Colors.white),
                   ),
                 ),
                 const SizedBox(width: 4.0),
@@ -273,7 +290,10 @@ class _TransactionsPageState extends State<TransactionsPage> {
                               title: Center(
                                 child: Text(
                                   'Food',
-                                  style: TextStyle(color: Color(0xFF0093FF)),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(color: Color(0xFF0093FF)),
                                 ),
                               ),
                               onTap: () {
@@ -282,7 +302,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                               },
                             ),
                             Divider(
-                              color: Color(0xFF0093FF).withOpacity(0.2),
+                              color: const Color(0xFF0093FF).withOpacity(0.2),
                               thickness: 1,
                               indent: 20,
                               endIndent: 20,
@@ -291,7 +311,10 @@ class _TransactionsPageState extends State<TransactionsPage> {
                               title: Center(
                                 child: Text(
                                   'Bill',
-                                  style: TextStyle(color: Color(0xFF0093FF)),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(color: Color(0xFF0093FF)),
                                 ),
                               ),
                               onTap: () {
@@ -300,16 +323,19 @@ class _TransactionsPageState extends State<TransactionsPage> {
                               },
                             ),
                             Divider(
-                              color: Color(0xFF0093FF).withOpacity(0.2),
+                              color: const Color(0xFF0093FF).withOpacity(0.2),
                               thickness: 1,
                               indent: 20,
                               endIndent: 20,
                             ),
                             ListTile(
                               title: Center(
-                                child: const Text(
+                                child: Text(
                                   'Income',
-                                  style: TextStyle(color: Color(0xFF0093FF)),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(color: Color(0xFF0093FF)),
                                 ),
                               ),
                               onTap: () {
@@ -325,9 +351,12 @@ class _TransactionsPageState extends State<TransactionsPage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF0093FF),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Category',
-                    style: TextStyle(color: Colors.white),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
+                        ?.copyWith(color: Colors.white),
                   ),
                 ),
               ],

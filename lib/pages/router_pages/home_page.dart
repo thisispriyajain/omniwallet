@@ -101,9 +101,11 @@ class _HomePageState extends State<HomePage> {
       });
     } catch (e) {
       print('Error fetching spending data: $e');
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -124,13 +126,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'OmniWallet',
-          style: TextStyle(
-            color: Color(0xFF0093FF),
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                color: Color(0xFF0093FF),
+                fontWeight: FontWeight.bold,
+              ),
         ),
         centerTitle: true,
       ),
@@ -156,40 +157,46 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Text(
                                 "Hello, $userName",
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineSmall
+                                    ?.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                               ),
                               const SizedBox(height: 8),
                               Text(
                                 "You've spent \$${totalMonthlySpending.toStringAsFixed(2)}",
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w400,
+                                    ),
                               ),
                               const SizedBox(height: 8),
                               Text(
                                 latestTransactionDate.isNotEmpty
                                     ? latestTransactionDate
                                     : "No transactions",
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      color: Colors.white,
+                                    ),
                               ),
                             ],
                           ),
                         ),
                       ),
                       const SizedBox(height: 32),
-                      const Text(
+                      Text(
                         "Daily Spending",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            color: Colors.blue, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 16),
                       Expanded(

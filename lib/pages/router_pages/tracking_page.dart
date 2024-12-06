@@ -87,28 +87,36 @@ class _TrackingPageState extends State<TrackingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'OmniWallet',
-          style: TextStyle(
-            color: Color(0xFF0093FF),
-            fontSize: 45,
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                color: Color(0xFF0093FF),
+                fontWeight: FontWeight.bold,
+              ),
         ),
         centerTitle: true,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : transactionData.isEmpty
-              ? const Center(child: Text('No transactions available'))
+              ? Center(
+                  child: Text(
+                    'No transactions available',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                )
               : Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      const Text(
+                      Text(
                         'Transaction Overview',
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineSmall
+                            ?.copyWith(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 20),
                       Expanded(
@@ -138,10 +146,14 @@ class _TrackingPageState extends State<TrackingPage> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      const Text(
+                      Text(
                         'Transaction Breakdown',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 10),
                       Expanded(
