@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/foundation.dart';
@@ -52,22 +53,38 @@ class LogInCubit extends Cubit<LogInState> {
 
   Future<String?> googleSignIn() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    if (googleUser == null) {
+      return 'Sign in failed';
+    }
     if (googleUser != null) {
       try {
         final GoogleSignInAuthentication? googleAuth =
-            await googleUser?.authentication;
+            await googleUser.authentication;
         final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth?.accessToken,
           idToken: googleAuth?.idToken,
         );
         UserCredential userCredential =
             await FirebaseAuth.instance.signInWithCredential(credential);
-        emit(SignInSuccess());
-        return null;
+        final User? user = userCredential.user;
+        if (user != null) {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .set({
+            'name': user.displayName ?? 'No name provided',
+            'email': user.email ?? 'No email provided',
+          }, SetOptions(merge: true));
+          emit(SignInSuccess());
+          return null;
+        } //else {
+        //   return "User not found";
+        // }
       } catch (e) {
         return e.toString();
       }
     }
+    return null;
   }
 
   Future<String?> appleSignIn() async {
@@ -83,6 +100,7 @@ class LogInCubit extends Cubit<LogInState> {
       emit(SignInSuccess());
       //authenticationBloc.add(AuthenticationLoginEvent());
     }
+    return null;
   }
 
   Future<String?> forgotPassword({required String email}) async {

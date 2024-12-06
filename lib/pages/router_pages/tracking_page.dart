@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart'; // Add this package for date formatting
+import 'package:firebase_auth/firebase_auth.dart';
 
 class TrackingPage extends StatefulWidget {
   const TrackingPage({super.key});
@@ -41,17 +42,25 @@ class _TrackingPageState extends State<TrackingPage> {
       }
 
       final snapshot = await query.get();
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        print("no user exists");
+        return;
+      }
+      final snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('transactions')
+          .get();
       Map<String, double> data = {};
       for (var doc in snapshot.docs) {
         final category = doc['category'] as String;
         final amount = (doc['amount'] as num).toDouble();
 
-        if (amount < 0) {
-          if (data.containsKey(category)) {
-            data[category] = data[category]! + amount; // Accumulate raw negative amounts
-          } else {
-            data[category] = amount;
-          }
+        if (data.containsKey(category)) {
+          data[category] = data[category]! + amount; // Add to existing category
+        } else {
+          data[category] = amount; // Initialize new category with the amount
         }
       }
 
@@ -117,27 +126,36 @@ class _TrackingPageState extends State<TrackingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'OmniWallet',
-          style: TextStyle(
-            color: Color(0xFF0093FF),
-            fontSize: 45,
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                color: Color(0xFF0093FF),
+                fontWeight: FontWeight.bold,
+              ),
         ),
         centerTitle: true,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : transactionData.isEmpty
-              ? const Center(child: Text('No transactions available'))
+              ? Center(
+                  child: Text(
+                    'No transactions available',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                )
               : Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      const Text(
+                      Text(
                         'Transaction Overview',
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineSmall
+                            ?.copyWith(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 10),
                       ElevatedButton(
@@ -155,13 +173,17 @@ class _TrackingPageState extends State<TrackingPage> {
                         child: PieChart(
                           PieChartData(
                             pieTouchData: PieTouchData(
-                              touchCallback: (FlTouchEvent event, PieTouchResponse? pieTouchResponse) {
+                              touchCallback: (FlTouchEvent event,
+                                  PieTouchResponse? pieTouchResponse) {
                                 setState(() {
-                                  if (!event.isInterestedForInteractions || pieTouchResponse == null) {
+                                  if (!event.isInterestedForInteractions ||
+                                      pieTouchResponse == null) {
                                     touchedIndex = -1;
                                     return;
                                   }
-                                  touchedIndex = pieTouchResponse.touchedSection?.touchedSectionIndex ?? -1;
+                                  touchedIndex = pieTouchResponse.touchedSection
+                                          ?.touchedSectionIndex ??
+                                      -1;
                                 });
                               },
                             ),
@@ -173,9 +195,14 @@ class _TrackingPageState extends State<TrackingPage> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      const Text(
+                      Text(
                         'Transaction Breakdown',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 10),
                       Expanded(
@@ -183,8 +210,10 @@ class _TrackingPageState extends State<TrackingPage> {
                         child: ListView(
                           children: transactionData.entries.map((entry) {
                             return ListTile(
-                              leading: Icon(Icons.category, color: _getCategoryColor(entry.key)),
-                              title: Text('${entry.key}: \$${entry.value.toStringAsFixed(2)}'),
+                              leading: Icon(Icons.category,
+                                  color: _getCategoryColor(entry.key)),
+                              title: Text(
+                                  '${entry.key}: \$${entry.value.toStringAsFixed(2)}'),
                             );
                           }).toList(),
                         ),
@@ -197,7 +226,7 @@ class _TrackingPageState extends State<TrackingPage> {
 
   Color _getCategoryColor(String category) {
     switch (category) {
-      case 'Entertainment':
+      case 'Income':
         return const Color(0xFF3E3C8D);
       case 'Bill':
         return const Color(0xFF0DA5E9);
