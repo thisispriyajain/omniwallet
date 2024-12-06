@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class TrackingPage extends StatefulWidget {
   const TrackingPage({super.key});
@@ -13,6 +15,7 @@ class _TrackingPageState extends State<TrackingPage> {
   Map<String, double> transactionData = {};
   bool isLoading = true;
   int touchedIndex = -1;
+  DateTimeRange? selectedDateRange;
 
   @override
   void initState() {
@@ -21,8 +24,34 @@ class _TrackingPageState extends State<TrackingPage> {
   }
 
   Future<void> _fetchTransactionData() async {
+    setState(() {
+      isLoading = true;
+    });
+
     try {
-      final snapshot = await FirebaseFirestore.instance.collection('transactions').get();
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        print("No authenticated user exists");
+        return;
+      }
+
+      Query query = FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('transactions');
+
+      if (selectedDateRange != null) {
+        final dateFormat = DateFormat('MM/dd/yyyy');
+        final startDate = dateFormat.format(selectedDateRange!.start);
+        final endDate = dateFormat.format(selectedDateRange!.end);
+
+        query = query
+            .where('date', isGreaterThanOrEqualTo: startDate)
+            .where('date', isLessThanOrEqualTo: endDate);
+      }
+
+      final snapshot = await query.get();
+
       Map<String, double> data = {};
       for (var doc in snapshot.docs) {
         final category = doc['category'] as String;
@@ -36,8 +65,6 @@ class _TrackingPageState extends State<TrackingPage> {
           }
         }
       }
-
-      // Convert all accumulated amounts to positive for display purposes
       data = data.map((key, value) => MapEntry(key, value.abs()));
 
       setState(() {
@@ -49,6 +76,26 @@ class _TrackingPageState extends State<TrackingPage> {
       setState(() {
         isLoading = false;
       });
+    }
+  }
+
+  Future<void> _selectDateRange() async {
+    final pickedRange = await showDateRangePicker(
+      context: context,
+      initialDateRange: selectedDateRange ??
+          DateTimeRange(
+            start: DateTime.now().subtract(const Duration(days: 7)),
+            end: DateTime.now(),
+          ),
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+    );
+
+    if (pickedRange != null) {
+      setState(() {
+        selectedDateRange = pickedRange;
+      });
+      _fetchTransactionData();
     }
   }
 
@@ -79,27 +126,46 @@ class _TrackingPageState extends State<TrackingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'OmniWallet',
-          style: TextStyle(
-            color: Color(0xFF0093FF),
-            fontSize: 45,
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                color: Color(0xFF0093FF),
+                fontWeight: FontWeight.bold,
+              ),
         ),
         centerTitle: true,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : transactionData.isEmpty
-              ? const Center(child: Text('No transactions available'))
+              ? Center(
+                  child: Text(
+                    'No transactions available',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                )
               : Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      const Text(
+                      Text(
                         'Transaction Overview',
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineSmall
+                            ?.copyWith(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: _selectDateRange,
+                        child: Text(
+                          selectedDateRange == null
+                              ? 'Select Date Range'
+                              : 'Selected: ${DateFormat('MM/dd/yyyy').format(selectedDateRange!.start)} - ${DateFormat('MM/dd/yyyy').format(selectedDateRange!.end)}',
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                       const SizedBox(height: 20),
                       Expanded(
@@ -107,13 +173,17 @@ class _TrackingPageState extends State<TrackingPage> {
                         child: PieChart(
                           PieChartData(
                             pieTouchData: PieTouchData(
-                              touchCallback: (FlTouchEvent event, PieTouchResponse? pieTouchResponse) {
+                              touchCallback: (FlTouchEvent event,
+                                  PieTouchResponse? pieTouchResponse) {
                                 setState(() {
-                                  if (!event.isInterestedForInteractions || pieTouchResponse == null) {
+                                  if (!event.isInterestedForInteractions ||
+                                      pieTouchResponse == null) {
                                     touchedIndex = -1;
                                     return;
                                   }
-                                  touchedIndex = pieTouchResponse.touchedSection?.touchedSectionIndex ?? -1;
+                                  touchedIndex = pieTouchResponse.touchedSection
+                                          ?.touchedSectionIndex ??
+                                      -1;
                                 });
                               },
                             ),
@@ -125,9 +195,14 @@ class _TrackingPageState extends State<TrackingPage> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      const Text(
+                      Text(
                         'Transaction Breakdown',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 10),
                       Expanded(
@@ -135,8 +210,10 @@ class _TrackingPageState extends State<TrackingPage> {
                         child: ListView(
                           children: transactionData.entries.map((entry) {
                             return ListTile(
-                              leading: Icon(Icons.category, color: _getCategoryColor(entry.key)),
-                              title: Text('${entry.key}: \$${entry.value.toStringAsFixed(2)}'),
+                              leading: Icon(Icons.category,
+                                  color: _getCategoryColor(entry.key)),
+                              title: Text(
+                                  '${entry.key}: \$${entry.value.toStringAsFixed(2)}'),
                             );
                           }).toList(),
                         ),
@@ -149,7 +226,7 @@ class _TrackingPageState extends State<TrackingPage> {
 
   Color _getCategoryColor(String category) {
     switch (category) {
-      case 'Entertainment':
+      case 'Income':
         return const Color(0xFF3E3C8D);
       case 'Bill':
         return const Color(0xFF0DA5E9);
