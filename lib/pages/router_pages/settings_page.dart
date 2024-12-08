@@ -102,7 +102,7 @@ class _SettingsPageState extends State<SettingsPage> {
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: Colors.blue,
                     fontSize: 18,
-                    fontWeight: FontWeight.w100,
+                    fontWeight: FontWeight.normal,
                   ),
             ),
           ),
@@ -124,7 +124,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 value: settingsState.isDarkMode,
                 onChanged: (value) {
                   settingsState.toggleDarkMode(value);
-                  GoRouter.of(context).go('/settings');
+                  // GoRouter.of(context).go('/settings');
                 },
                 secondary: const Icon(Icons.brightness_6, color: Colors.blue),
               );
@@ -147,7 +147,6 @@ class _SettingsPageState extends State<SettingsPage> {
                   ],
                   onChanged: (value) {
                     settingsState.toggleFontSize(value ?? false);
-                    GoRouter.of(context).go('/settings');
                   },
                 ),
               );
@@ -186,9 +185,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     }
                   }
                 }
-                if (mounted) {
-                  GoRouter.of(context).go('/settings');
-                }
               }),
           const Divider(),
           Padding(
@@ -197,7 +193,7 @@ class _SettingsPageState extends State<SettingsPage> {
               "Account",
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: Colors.blue,
-                    fontWeight: FontWeight.w100,
+                    fontWeight: FontWeight.normal,
                   ),
             ),
           ),
