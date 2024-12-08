@@ -364,10 +364,23 @@ class _TransactionsPageState extends State<TransactionsPage> {
             const SizedBox(height: 16.0),
             Expanded(
               child: _transactions.isEmpty
-                  ? const Center(
-                      child: Text(
-                        'No Transactions Found',
-                        style: TextStyle(fontSize: 16),
+                  ? const Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'There are no transcations at the moment.',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              'Tap the \'Add\' button in the top-right to create one!',
+                              style: TextStyle(fontSize: 16),
+                            )
+                          ],
+                        ),
                       ),
                     )
                   : Padding(
