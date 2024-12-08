@@ -29,7 +29,7 @@ class _SettingsPageState extends State<SettingsPage> {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) {
         setState(() {
-          userName = 'No user exists';
+          return;
         });
         return;
       }
@@ -38,7 +38,9 @@ class _SettingsPageState extends State<SettingsPage> {
           .doc(user.uid)
           .get();
       if (userDoc.exists) {
+        final preferences = userDoc.data()?['preferences'] ?? {};
         setState(() {
+          isNotificationsEnabled = preferences['notificationsEnabled'] ?? false;
           userName = userDoc.data()?['name'] ?? 'No name set';
         });
       } else {
@@ -160,11 +162,9 @@ class _SettingsPageState extends State<SettingsPage> {
               value: isNotificationsEnabled,
               secondary: const Icon(Icons.notifications, color: Colors.blue),
               onChanged: (value) async {
-                if (mounted) {
-                  setState(() {
-                    isNotificationsEnabled = value;
-                  });
-                }
+                setState(() {
+                  isNotificationsEnabled = value;
+                });
 
                 final user = FirebaseAuth.instance.currentUser;
                 if (user != null) {
@@ -176,13 +176,11 @@ class _SettingsPageState extends State<SettingsPage> {
                       'preferences': {'notificationsEnabled': value},
                     }, SetOptions(merge: true));
                   } catch (e) {
-                    if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                            content: Text(
-                                'Failed to update notification preference: $e')),
-                      );
-                    }
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                          content: Text(
+                              'Failed to update notification preference: $e')),
+                    );
                   }
                 }
               }),
