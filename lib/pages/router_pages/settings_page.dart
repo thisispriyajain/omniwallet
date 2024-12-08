@@ -29,7 +29,7 @@ class _SettingsPageState extends State<SettingsPage> {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) {
         setState(() {
-          userName = 'No user exists';
+          return;
         });
         return;
       }
@@ -38,7 +38,9 @@ class _SettingsPageState extends State<SettingsPage> {
           .doc(user.uid)
           .get();
       if (userDoc.exists) {
+        final preferences = userDoc.data()?['preferences'] ?? {};
         setState(() {
+          isNotificationsEnabled = preferences['notificationsEnabled'] ?? false;
           userName = userDoc.data()?['name'] ?? 'No name set';
         });
       } else {
@@ -102,7 +104,7 @@ class _SettingsPageState extends State<SettingsPage> {
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: Colors.blue,
                     fontSize: 18,
-                    fontWeight: FontWeight.w100,
+                    fontWeight: FontWeight.normal,
                   ),
             ),
           ),
@@ -124,7 +126,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 value: settingsState.isDarkMode,
                 onChanged: (value) {
                   settingsState.toggleDarkMode(value);
-                  GoRouter.of(context).go('/settings');
+                  // GoRouter.of(context).go('/settings');
                 },
                 secondary: const Icon(Icons.brightness_6, color: Colors.blue),
               );
@@ -147,7 +149,6 @@ class _SettingsPageState extends State<SettingsPage> {
                   ],
                   onChanged: (value) {
                     settingsState.toggleFontSize(value ?? false);
-                    GoRouter.of(context).go('/settings');
                   },
                 ),
               );
@@ -161,11 +162,9 @@ class _SettingsPageState extends State<SettingsPage> {
               value: isNotificationsEnabled,
               secondary: const Icon(Icons.notifications, color: Colors.blue),
               onChanged: (value) async {
-                if (mounted) {
-                  setState(() {
-                    isNotificationsEnabled = value;
-                  });
-                }
+                setState(() {
+                  isNotificationsEnabled = value;
+                });
 
                 final user = FirebaseAuth.instance.currentUser;
                 if (user != null) {
@@ -177,17 +176,12 @@ class _SettingsPageState extends State<SettingsPage> {
                       'preferences': {'notificationsEnabled': value},
                     }, SetOptions(merge: true));
                   } catch (e) {
-                    if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                            content: Text(
-                                'Failed to update notification preference: $e')),
-                      );
-                    }
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                          content: Text(
+                              'Failed to update notification preference: $e')),
+                    );
                   }
-                }
-                if (mounted) {
-                  GoRouter.of(context).go('/settings');
                 }
               }),
           const Divider(),
@@ -197,7 +191,7 @@ class _SettingsPageState extends State<SettingsPage> {
               "Account",
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: Colors.blue,
-                    fontWeight: FontWeight.w100,
+                    fontWeight: FontWeight.normal,
                   ),
             ),
           ),
