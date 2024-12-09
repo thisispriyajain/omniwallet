@@ -1,12 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import '../../cubits/transaction/cubit/transaction_cubit.dart';
 import '../../model/transaction.dart' as model;
-import '../../widgets/category_filter_sheet.dart';
 import '../../widgets/transaction_card.dart';
 import 'new_transaction.dart';
 import 'transaction_details.dart';
@@ -114,7 +110,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
         title: Text(
           'OmniWallet',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: Color(0xFF0093FF),
+                color: const Color(0xFF0093FF),
                 fontWeight: FontWeight.bold,
               ),
         ),
@@ -122,72 +118,23 @@ class _TransactionsPageState extends State<TransactionsPage> {
         actions: [
           IconButton(
             onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                shape: const RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(16.0)),
+              final user = FirebaseAuth.instance.currentUser;
+              if (user == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('No authenticated user.')),
+                );
+                return;
+              }
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NewTransaction(
+                    onAddTransaction: (newTransaction) {
+                      _fetchTransactions(); // Refresh transactions
+                    },
+                    userID: user.uid,
+                  ),
                 ),
-                builder: (context) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ListTile(
-                        title: Text(
-                          'Add a Transaction',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(color: Color(0xFF0093FF)),
-                        ),
-                        onTap: () {
-                          final user = FirebaseAuth.instance.currentUser;
-                          if (user == null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('No authenticated user.')),
-                            );
-                            return;
-                          }
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => NewTransaction(
-                                onAddTransaction: (newTransaction) {
-                                  // setState(() {
-                                  //   //_transactions.add(newTransaction);
-                                  //   //_filteredTransactions.add(newTransaction);
-                                  // });
-                                  _fetchTransactions();
-                                },
-                                userID: user.uid,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      Divider(
-                        color: const Color(0xFF0093FF).withOpacity(0.2),
-                        thickness: 1,
-                        indent: 20,
-                        endIndent: 20,
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.qr_code_scanner,
-                            color: Color(0xFF0093FF)),
-                        title: Text(
-                          'Scan',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(color: Color(0xFF0093FF)),
-                        ),
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
-                  );
-                },
               );
             },
             icon: const Icon(Icons.add_circle, color: Color(0xFF0093FF)),
@@ -205,7 +152,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                 hintStyle: Theme.of(context)
                     .textTheme
                     .bodyMedium
-                    ?.copyWith(color: Color(0xFF0093FF)),
+                    ?.copyWith(color: const Color(0xFF0093FF)),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
                   borderSide: const BorderSide(color: Color(0xFF0093FF)),
@@ -219,7 +166,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium
-                  ?.copyWith(color: Color(0xFF0093FF)),
+                  ?.copyWith(color: const Color(0xFF0093FF)),
               onChanged: _filterTransactions,
             ),
             const SizedBox(height: 16.0),
@@ -293,7 +240,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium
-                                      ?.copyWith(color: Color(0xFF0093FF)),
+                                      ?.copyWith(
+                                          color: const Color(0xFF0093FF)),
                                 ),
                               ),
                               onTap: () {
@@ -314,7 +262,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium
-                                      ?.copyWith(color: Color(0xFF0093FF)),
+                                      ?.copyWith(
+                                          color: const Color(0xFF0093FF)),
                                 ),
                               ),
                               onTap: () {
@@ -335,7 +284,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium
-                                      ?.copyWith(color: Color(0xFF0093FF)),
+                                      ?.copyWith(
+                                          color: const Color(0xFF0093FF)),
                                 ),
                               ),
                               onTap: () {
@@ -371,7 +321,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              'There are no transcations at the moment.',
+                              'There are no transactions at the moment.',
                               style: TextStyle(fontSize: 16),
                             ),
                             SizedBox(height: 8),
@@ -397,7 +347,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                 if (user == null) {
                                   throw 'No authenticated user.';
                                 }
-                                final querySnapshot = FirebaseFirestore.instance
+                                await FirebaseFirestore.instance
                                     .collection('users')
                                     .doc(user.uid)
                                     .collection('transactions')
