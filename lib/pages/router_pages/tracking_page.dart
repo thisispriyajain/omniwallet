@@ -159,12 +159,19 @@ class _TrackingPageState extends State<TrackingPage> {
                       ),
                       const SizedBox(height: 10),
                       ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF0093FF),
+                        ),
                         onPressed: _selectDateRange,
                         child: Text(
                           selectedDateRange == null
                               ? 'Select Date Range'
                               : 'Selected: ${DateFormat('MM/dd/yyyy').format(selectedDateRange!.start)} - ${DateFormat('MM/dd/yyyy').format(selectedDateRange!.end)}',
                           textAlign: TextAlign.center,
+                          style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge
+                            ?.copyWith(color: Colors.white),
                         ),
                       ),
                       const SizedBox(height: 20),

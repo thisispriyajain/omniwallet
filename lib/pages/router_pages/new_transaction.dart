@@ -248,31 +248,32 @@ class _NewTransactionPageState extends State<NewTransaction> {
         },
       ),
       if (_showDropdown)
-        DropdownButtonFormField<String>(
-          items: _recommendedLocations
-              .map((location) => DropdownMenuItem(
-                    value: location,
-                    child: Text(location),
-                  ))
-              .toList(),
-          onChanged: (value) async {
-            if (value == "Current Location") {
-              await _getCurrentLocation();
-            } else {
-              setState(() {
-                _selectedLocation = value;
-              });
-            }
-          },
-            hint: const Text(
-              'Select a location',
-              style: TextStyle(
-              color: Color.fromARGB(255, 189, 189, 189),
-              fontSize: 18,
-              fontWeight: FontWeight.w400,
-              ),
-            ),
-        ),
+  DropdownButtonFormField<String>(
+    isExpanded: true, // Ensures dropdown does not overflow
+    items: _recommendedLocations
+        .map((location) => DropdownMenuItem(
+              value: location,
+              child: Text(location),
+            ))
+        .toList(),
+    onChanged: (value) async {
+      if (value == "Current Location") {
+        await _getCurrentLocation();
+      } else {
+        setState(() {
+          _selectedLocation = value;
+        });
+      }
+    },
+    hint: const Text(
+      'Select a location',
+      style: TextStyle(
+        color: Color.fromARGB(255, 189, 189, 189),
+        fontSize: 18,
+        fontWeight: FontWeight.w400,
+      ),
+    ),
+  ),
     ],
   );
 }

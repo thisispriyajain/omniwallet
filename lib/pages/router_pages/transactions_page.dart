@@ -224,7 +224,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
               onChanged: _filterTransactions,
             ),
             const SizedBox(height: 16.0),
-            Row(
+            Wrap(
               children: [
                 ElevatedButton(
                   onPressed: _clearFilters,
