@@ -54,6 +54,7 @@ class SettingsState extends ChangeNotifier {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
   final authenticationBloc = AuthenticationBloc();
+  late final routerConfig = routerDemo(authenticationBloc);
 
   // This widget is the root of your application.
   @override
@@ -65,7 +66,8 @@ class MyApp extends StatelessWidget {
           return MaterialApp.router(
             title: 'OmniWallet',
             theme: settingsState.currentTheme,
-            routerConfig: routerDemo(authenticationBloc),
+            routerConfig:
+                routerConfig, //prevent theme to reinitailize routerConfig
           );
         },
       ),
