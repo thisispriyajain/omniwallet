@@ -40,7 +40,7 @@ class _SettingsPageState extends State<SettingsPage> {
       if (userDoc.exists) {
         final preferences = userDoc.data()?['preferences'] ?? {};
         setState(() {
-          isNotificationsEnabled = preferences['notificationsEnabled'] ?? false;
+          isNotificationsEnabled = preferences['notificationsEnabled'] ?? true;
           userName = userDoc.data()?['name'] ?? 'No name set';
         });
       } else {
@@ -155,7 +155,7 @@ class _SettingsPageState extends State<SettingsPage> {
             },
           ),
           SwitchListTile(
-              title: Text("Notifications",
+              title: Text("In-App Notifications",
                   style: Theme.of(context).textTheme.bodyLarge),
               subtitle: Text(isNotificationsEnabled ? "Enabled" : "Disabled",
                   style: Theme.of(context).textTheme.bodyMedium),
