@@ -123,72 +123,23 @@ class _TransactionsPageState extends State<TransactionsPage> {
         actions: [
           IconButton(
             onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                shape: const RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(16.0)),
+              final user = FirebaseAuth.instance.currentUser;
+              if (user == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('No authenticated user.')),
+                );
+                return;
+              }
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NewTransaction(
+                    onAddTransaction: (newTransaction) {
+                      _fetchTransactions();
+                    },
+                    userID: user.uid,
+                  ),
                 ),
-                builder: (context) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ListTile(
-                        title: Text(
-                          'Add a Transaction',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(color: Color(0xFF0093FF)),
-                        ),
-                        onTap: () {
-                          final user = FirebaseAuth.instance.currentUser;
-                          if (user == null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('No authenticated user.')),
-                            );
-                            return;
-                          }
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => NewTransaction(
-                                onAddTransaction: (newTransaction) {
-                                  // setState(() {
-                                  //   //_transactions.add(newTransaction);
-                                  //   //_filteredTransactions.add(newTransaction);
-                                  // });
-                                  _fetchTransactions();
-                                },
-                                userID: user.uid,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      Divider(
-                        color: const Color(0xFF0093FF).withOpacity(0.2),
-                        thickness: 1,
-                        indent: 20,
-                        endIndent: 20,
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.qr_code_scanner,
-                            color: Color(0xFF0093FF)),
-                        title: Text(
-                          'Scan',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(color: Color(0xFF0093FF)),
-                        ),
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
-                  );
-                },
               );
             },
             icon: const Icon(Icons.add_circle, color: Color(0xFF0093FF)),
