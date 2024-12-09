@@ -196,14 +196,16 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
           ListTile(
-            title: Text('Name', style: Theme.of(context).textTheme.bodyLarge),
-            subtitle:
-                Text(userName, style: Theme.of(context).textTheme.bodyMedium),
-            leading: const Icon(Icons.person, color: Colors.blue),
-            onTap: () {
-              _showNameEditDialog(context, _updateUserName);
-            },
-          ),
+              title: Text('Name', style: Theme.of(context).textTheme.bodyLarge),
+              subtitle:
+                  Text(userName, style: Theme.of(context).textTheme.bodyMedium),
+              leading: const Icon(Icons.person, color: Colors.blue),
+              trailing: IconButton(
+                icon: const Icon(Icons.edit, color: Colors.blue),
+                onPressed: () {
+                  _showNameEditDialog(context, _updateUserName);
+                },
+              )),
           ListTile(
             title: Text('Email', style: Theme.of(context).textTheme.bodyLarge),
             subtitle: Text(
