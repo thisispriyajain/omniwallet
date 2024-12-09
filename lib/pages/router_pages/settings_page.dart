@@ -40,7 +40,7 @@ class _SettingsPageState extends State<SettingsPage> {
       if (userDoc.exists) {
         final preferences = userDoc.data()?['preferences'] ?? {};
         setState(() {
-          isNotificationsEnabled = preferences['notificationsEnabled'] ?? false;
+          isNotificationsEnabled = preferences['notificationsEnabled'] ?? true;
           userName = userDoc.data()?['name'] ?? 'No name set';
         });
       } else {
@@ -155,7 +155,7 @@ class _SettingsPageState extends State<SettingsPage> {
             },
           ),
           SwitchListTile(
-              title: Text("Notifications",
+              title: Text("In-App Notifications",
                   style: Theme.of(context).textTheme.bodyLarge),
               subtitle: Text(isNotificationsEnabled ? "Enabled" : "Disabled",
                   style: Theme.of(context).textTheme.bodyMedium),
@@ -196,14 +196,16 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
           ListTile(
-            title: Text('Name', style: Theme.of(context).textTheme.bodyLarge),
-            subtitle:
-                Text(userName, style: Theme.of(context).textTheme.bodyMedium),
-            leading: const Icon(Icons.person, color: Colors.blue),
-            onTap: () {
-              _showNameEditDialog(context, _updateUserName);
-            },
-          ),
+              title: Text('Name', style: Theme.of(context).textTheme.bodyLarge),
+              subtitle:
+                  Text(userName, style: Theme.of(context).textTheme.bodyMedium),
+              leading: const Icon(Icons.person, color: Colors.blue),
+              trailing: IconButton(
+                icon: const Icon(Icons.edit, color: Colors.blue),
+                onPressed: () {
+                  _showNameEditDialog(context, _updateUserName);
+                },
+              )),
           ListTile(
             title: Text('Email', style: Theme.of(context).textTheme.bodyLarge),
             subtitle: Text(
