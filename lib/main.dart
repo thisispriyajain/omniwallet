@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:omniwallet/blocs/authentication/bloc/authentication_bloc.dart';
 import 'package:omniwallet/firebase_options.dart';
@@ -8,12 +11,48 @@ import 'package:provider/provider.dart';
 import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import 'package:firebase_app_installations/firebase_app_installations.dart';
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print("Handling a background message: ${message.messageId}");
+  print('Message data: ${message.data}');
+  print('Message notification: ${message.notification?.title}');
+  print('Message notification: ${message.notification?.body}');
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   print(await FirebaseInstallations.instance.getId());
+  final messaging = FirebaseMessaging.instance;
+  final settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  const vapidKey =
+      "BI8WScW_CiCQMj-yBaJm1587JI6B-yMlJDo0PG-Rs-wSaqaaGUhQn7tsRi0mCeOXV1EcyVVqXsymN3rPk2LokkE";
+  String? token;
+  if (DefaultFirebaseOptions.currentPlatform == DefaultFirebaseOptions.web) {
+    token = await messaging.getToken(
+      vapidKey: vapidKey,
+    );
+  } else {
+    try {
+      token = await messaging.getToken();
+    } catch (e) {
+      print("Error getting token $e");
+    }
+  }
+  print("Messaging token: $token");
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(MyApp());
 }
 

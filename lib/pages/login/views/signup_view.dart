@@ -71,141 +71,149 @@ class _SignupViewState extends State<SignupView> {
         titleSpacing: 0,
       ),
       backgroundColor: Colors.white,
-      body: Form(
-        key: _formKey,
-        child: Center(
-          child: Container(
-            margin: const EdgeInsets.all(20),
-            padding: const EdgeInsets.all(20.0),
-            width: double.infinity,
-            child: Column(
-              children: [
-                const SizedBox(height: 45),
-                Text(
-                  "Sign up",
-                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                        color: Color(0xFF0093FF),
+      body: SingleChildScrollView(
+        // Wrap the body with SingleChildScrollView
+        child: Form(
+          key: _formKey,
+          child: Center(
+            child: Container(
+              margin: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20.0),
+              width: double.infinity,
+              child: Column(
+                children: [
+                  const SizedBox(height: 45),
+                  Text(
+                    "Sign up",
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                          color: Color(0xFF0093FF),
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                  //SizedBox(height: 65),
+                  AnimatedCrossFade(
+                      firstChild: Container(),
+                      secondChild: Container(
+                        width: double.infinity,
+                        margin: const EdgeInsets.only(left: 20, right: 20),
+                        padding: const EdgeInsets.all(20.0),
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.errorContainer,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Text(errorMessage ?? "Error",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onErrorContainer)),
                       ),
-                  textAlign: TextAlign.center,
-                ),
-                //SizedBox(height: 65),
-                AnimatedCrossFade(
-                    firstChild: Container(),
-                    secondChild: Container(
-                      width: double.infinity,
-                      margin: const EdgeInsets.only(left: 20, right: 20),
-                      padding: const EdgeInsets.all(20.0),
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.errorContainer,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Text(errorMessage ?? "Error",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onErrorContainer)),
-                    ),
-                    crossFadeState: crossFadeState,
-                    duration: const Duration(milliseconds: 300)),
-                TextFormField(
-                  controller: fullnameController,
-                  decoration: const InputDecoration(labelText: "Name"),
-                  onSaved: (newValue) {
-                    name = fullnameController.text;
-                  },
-                  validator: (value) => null,
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: emailController,
-                  decoration: const InputDecoration(labelText: "Email address"),
-                  onSaved: (newValue) {
-                    email = emailController.text;
-                  },
-                  validator: (value) => null,
-                ),
-                const SizedBox(height: 20),
-                _buildPasswordField(
-                  controller: passwordController,
-                  labelText: "Password",
-                  isVisible: _isPasswordVisible,
-                  onToggle: () {
-                    setState(() {
-                      _isPasswordVisible = !_isPasswordVisible;
-                    });
-                  },
-                ),
-                const SizedBox(height: 20),
-                _buildPasswordField(
-                    controller: confirmPasswordController,
-                    labelText: "Confirm password",
-                    isVisible: _isConfirmPasswordVisible,
+                      crossFadeState: crossFadeState,
+                      duration: const Duration(milliseconds: 300)),
+                  TextFormField(
+                    controller: fullnameController,
+                    decoration: const InputDecoration(labelText: "Name"),
+                    onSaved: (newValue) {
+                      name = fullnameController.text;
+                    },
+                    validator: (value) => null,
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: emailController,
+                    decoration:
+                        const InputDecoration(labelText: "Email address"),
+                    onSaved: (newValue) {
+                      email = emailController.text;
+                    },
+                    validator: (value) => null,
+                  ),
+                  const SizedBox(height: 20),
+                  _buildPasswordField(
+                    controller: passwordController,
+                    labelText: "Password",
+                    isVisible: _isPasswordVisible,
                     onToggle: () {
                       setState(() {
-                        _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                        _isPasswordVisible = !_isPasswordVisible;
                       });
-                    }),
-                const SizedBox(height: 30),
-                Container(
-                  width: double.maxFinite,
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  child: FilledButton(
-                      onPressed: () async {
-                        if (_formKey.currentState?.validate() ?? false) {
-                          _formKey.currentState?.save();
-                          errorMessage = await widget.emailSignUpCallback(
-                              email: email!,
-                              password: password!,
-                              name: name!,
-                              confirmPassword: confirmPassword!);
-                          if (errorMessage != null) {
-                            setState(() {
-                              emailController.clear();
-                              passwordController.clear();
-                              crossFadeState = CrossFadeState.showSecond;
-                            });
-                          } else {
-                            final user = FirebaseAuth.instance.currentUser;
-                            if (user != null) {
-                              await _storeUserInFirestore(user, name!, email!);
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  _buildPasswordField(
+                      controller: confirmPasswordController,
+                      labelText: "Confirm password",
+                      isVisible: _isConfirmPasswordVisible,
+                      onToggle: () {
+                        setState(() {
+                          _isConfirmPasswordVisible =
+                              !_isConfirmPasswordVisible;
+                        });
+                      }),
+                  const SizedBox(height: 30),
+                  Container(
+                    width: double.maxFinite,
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
+                    child: FilledButton(
+                        onPressed: () async {
+                          if (_formKey.currentState?.validate() ?? false) {
+                            _formKey.currentState?.save();
+                            errorMessage = await widget.emailSignUpCallback(
+                                email: email!,
+                                password: password!,
+                                name: name!,
+                                confirmPassword: confirmPassword!);
+                            if (errorMessage != null) {
+                              setState(() {
+                                emailController.clear();
+                                passwordController.clear();
+                                fullnameController.clear();
+                                confirmPasswordController.clear();
+                                crossFadeState = CrossFadeState.showSecond;
+                              });
+                            } else {
+                              final user = FirebaseAuth.instance.currentUser;
+                              if (user != null) {
+                                await _storeUserInFirestore(
+                                    user, name!, email!);
+                              }
+                              await showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return const AlertDialog(
+                                      title: Text("Thank you for signing up!"),
+                                      content: Text(
+                                          "Please check your email for verifying your email address."),
+                                    );
+                                  });
                             }
-                            await showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return const AlertDialog(
-                                    title: Text("Thank you for signing up!"),
-                                    content: Text(
-                                        "Please check your email for verifying your email address."),
-                                  );
-                                });
                           }
-                        }
-                      },
-                      style: FilledButton.styleFrom(
-                        backgroundColor: const Color(0xFF0093FF),
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text("Sign up")),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Already have an account?",
-                        style: TextStyle(
-                          color: Colors.black,
-                        )),
-                    TextButton(
-                      onPressed: widget.signInRequestCallback,
-                      child: Text("Sign in",
+                        },
+                        style: FilledButton.styleFrom(
+                          backgroundColor: const Color(0xFF0093FF),
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text("Sign up")),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Already have an account?",
                           style: TextStyle(
-                            color: Color(0xFF0093FF),
+                            color: Colors.black,
                           )),
-                    )
-                  ],
-                )
-              ],
+                      TextButton(
+                        onPressed: widget.signInRequestCallback,
+                        child: Text("Sign in",
+                            style: TextStyle(
+                              color: Color(0xFF0093FF),
+                            )),
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -219,7 +227,6 @@ class _SignupViewState extends State<SignupView> {
     required bool isVisible,
     required VoidCallback onToggle,
   }) {
-    //SizedBox
     return TextFormField(
       controller: controller,
       obscureText: !isVisible,
@@ -246,8 +253,10 @@ class _SignupViewState extends State<SignupView> {
 
   @override
   void dispose() {
+    fullnameController.dispose();
     emailController.dispose();
     passwordController.dispose();
+    confirmPasswordController.dispose();
     super.dispose();
   }
 }
