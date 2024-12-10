@@ -45,6 +45,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
           category: data['category'] ?? '',
           amount: (data['amount'] ?? 0).toDouble(),
           description: data['description'] ?? '',
+          location: data['location'] ?? '',
         );
       }).toList();
 
@@ -121,7 +122,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
               final user = FirebaseAuth.instance.currentUser;
               if (user == null) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('No authenticated user.')),
+                  SnackBar(content: Text('No authenticated user.')),
                 );
                 return;
               }
@@ -130,7 +131,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                 MaterialPageRoute(
                   builder: (context) => NewTransaction(
                     onAddTransaction: (newTransaction) {
-                      _fetchTransactions(); // Refresh transactions
+                      _fetchTransactions();
                     },
                     userID: user.uid,
                   ),
@@ -170,7 +171,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
               onChanged: _filterTransactions,
             ),
             const SizedBox(height: 16.0),
-            Row(
+            Wrap(
               children: [
                 ElevatedButton(
                   onPressed: _clearFilters,
